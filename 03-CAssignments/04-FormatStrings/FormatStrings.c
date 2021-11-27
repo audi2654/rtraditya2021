@@ -20,6 +20,8 @@ int main(void)
     printf("Char 'amp_ch' = %c\n", amp_ch);
     char amp_str[] = "AstroMediComp RTR Batch 2021";
     printf("String 'amp_str' = %s\n\n", amp_str);
+    printf("String with padding 'amp_str' = %20.10s\n\n", amp_str);
+
 
     long amp_num = 80654123L;
     printf("Long 'amp_num' = %ld\n", amp_num);
