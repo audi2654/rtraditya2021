@@ -1,0 +1,28 @@
+OpenGL
+|-	Fixed Function Pipeline
+	|-	FreeGLUT
+	|-	Windows
+	|-	Linux
+|-	Programmable Pipeline
+	|-	Windows
+	|-	Linux
+	|-	Web
+	|-	Android
+	|-	MacOS
+	|-	iOS
+DirectX
+C
+Homework --optional
+
+
+Sample Assignment Structure:
+No_AssignmentName
+|-	srcfiles.cpp
+|-	headerfiles.h
+|-	resources
+	|-	resources files if any
+|-	preview
+	|-	output screenshot
+
+
+Add as Collaborator: deep-stuff-08
