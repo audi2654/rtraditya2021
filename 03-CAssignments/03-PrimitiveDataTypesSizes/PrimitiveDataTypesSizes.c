@@ -16,6 +16,8 @@ int main(void)
     printf("Size of double          = %ld bytes\n", sizeof(double));
     printf("Size of long double     = %ld bytes\n", sizeof(long double));
 
+    printf("Size of char            = %zu bytes\n", sizeof(char));      //z is length modifier & u is unsigned int
+
     printf("\n\n");
     return 0;
 }

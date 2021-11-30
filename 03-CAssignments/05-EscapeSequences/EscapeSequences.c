@@ -23,5 +23,7 @@ int main(void)
     printf("Demonstrating \102 using \\ooo Escape Sequence\n\n"); //0x41 is octal code for letter 'B', 
     //'ooo' is the place holder for the 3 digits forming a Hexadecimal number
 
+    printf("Demostrating modulo operator %%\n");
+
     return(0);
 }
