@@ -29,6 +29,11 @@ int main(void)
         printf("num = %d is between 0 & 100\n", num);
     }
 
+    if ((num > 100) && (num <= 200))
+    {
+        printf("num = %d is between 100 & 200\n", num);
+    }
+
     if ((num > 200) && (num <= 300))
     {
         printf("num = %d is between 200 & 300\n", num);
