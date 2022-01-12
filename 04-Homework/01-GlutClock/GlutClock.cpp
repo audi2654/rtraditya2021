@@ -130,10 +130,10 @@ void display(void)
 		glVertex3f(-0.13f, -0.24f, 0.0f);
 
 		//pt10-11 - between 9-12
-		glColor3f(0.0f, 1.0f, 1.0f);		//CYAN
+		glColor3f(1.0f, 0.0f, 1.0f);		//MAGENTA
 		glVertex3f(-0.24f, 0.13f, 0.0f);
 
-		glColor3f(1.0f, 0.0f, 1.0f);		//MAGENTA
+		glColor3f(0.0f, 1.0f, 1.0f);		//CYAN
 		glVertex3f(-0.13f, 0.24f, 0.0f);
 
 	glEnd();
