@@ -1,0 +1,2 @@
+#include "WindowIcon.h"
+AMP_MYICON ICON ampIcon.ico
