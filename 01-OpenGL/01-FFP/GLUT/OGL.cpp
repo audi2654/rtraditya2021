@@ -24,23 +24,23 @@ int main(int argc, char* argv[])
 	void uninitialize(void);
 
 	// code
-	glutInit(&argc, argv);
+	glutInit(&argc, argv);	//combo of WinMain, WndProc, wndclass, RegisterClassEx()
 
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);	//similar to PFD_DOUBLEBUFFER & PFD_TYPE_RGBA
 
 	glutInitWindowSize(800, 600);
 	glutInitWindowPosition(100, 100);
-	glutCreateWindow("Aditya's First OpenGL Window");
+	glutCreateWindow("Aditya's First OpenGL Window");	//combo of CreateWindow, ShowWindow, SetForegroundWindow, SetFocus
 
 	initialize();
 
-	glutReshapeFunc(resize);
-	glutDisplayFunc(display);
-	glutKeyboardFunc(keyboard);
-	glutMouseFunc(mouse);
-	glutCloseFunc(uninitialize);
+	glutReshapeFunc(resize);		//combo of WM_SIZE & void resize(int width, int height)
+	glutDisplayFunc(display);		//similar to void display(void)
+	glutKeyboardFunc(keyboard);		//WM_KEYDOWN & WM_KEYDOWN
+	glutMouseFunc(mouse);			//WM_LBUTTONDOWN
+	glutCloseFunc(uninitialize);	//uninitialize()
 
-	glutMainLoop();
+	glutMainLoop();					//game loop in WinMain()
 
 	return(0);
 }
@@ -71,20 +71,21 @@ void display(void)
 	glVertex3f(1.0f, -1.0f, 0.0f);
 	glEnd();
 
-	glutSwapBuffers();
+	glutSwapBuffers();		//similar to SwapBuffers(ghdc);
 }
 
-void keyboard(unsigned char key, int x, int y)
+void keyboard(unsigned char key, int x, int y)	//similar to (key is window message, lparam, wparam)
 {
 	// code
 	switch (key)
 	{
 	case 27:
-		glutLeaveMainLoop();
+		glutLeaveMainLoop();	//DestroyWindow()
 		break;
 
 	case 'F':
 	case 'f':
+		//ToggleFullScreen()
 		if (bFullScreen == false)
 		{
 			glutFullScreen();
