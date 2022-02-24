@@ -38,6 +38,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	int initialize(void);
 	void display(void);
 	void update(void);
+	void uninitialize(void);
 
 	//local var decl.
 	WNDCLASSEX wndclass;
@@ -66,7 +67,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
 	//initialize wndclass struct
 	wndclass.cbSize = sizeof(WNDCLASSEX);
-	wndclass.style = CS_HREDRAW | CS_VREDRAW;
+	wndclass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC; //CS_OWNDC : Windows OS gives flexibility to user of where to store created DeviceContext or resources
+	//like in movable or fized or in discardable/purgeable memory means create as needed, use, throw & repeat as needed, default is in discardable memory
+	//using CS_OWNDC you indicate to create non-discardable/purgeable resources or device context, because you can't afford to have discardable resources
+	//in OpenGL or immediate mode graphics
 	wndclass.cbClsExtra = 0;
 	wndclass.cbWndExtra = 0;
 	wndclass.lpfnWndProc = WndProc;
@@ -85,9 +89,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	xWindowPosition = (cxScreenWidth / 2) - (cxWindowWidth / 2);
 	yWindowPosition = (cyScreenHeight / 2) - (cyWindowHeight / 2);
 
-	hwnd = CreateWindow(szAppName,
+	hwnd = CreateWindowEx(WS_EX_APPWINDOW,  /*extended style here means satat taskbar chya var even if fullscreen astana dusri window pop up zali tari hi window topmost thev*/
+		szAppName,
 		TEXT("AMP RTR2021 Window"),
-		WS_OVERLAPPEDWINDOW,
+		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
 		xWindowPosition,
 		yWindowPosition,
 		WIN_WIDTH,
@@ -105,14 +110,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	//show window
 	ShowWindow(hwnd, iCmdShow);
 
-	//foregrounding & focusing the window
+	//foregrounding & focusing the window - just a good practice for safety side
 	SetForegroundWindow(hwnd);		//here ghwnd would also work, but its primary use is for funcs outside winmain, we should use local var hwnd here
 	SetFocus(hwnd);					//sends WM_SETFOCUS
 
 	//game loop
 	while (bDone == FALSE)
 	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))	//PeekMsg() is asynchronous, unlike GetMessage() which is kinda blocking type
 		{
 			if (msg.message == WM_QUIT)
 				bDone = TRUE;
@@ -135,6 +140,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 		}
 	}
 
+	uninitialize();
+
 	return((int)msg.wParam);
 }
 
@@ -144,7 +151,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	//local func decl.
 	void ToggleFullScreen(void);
 	void resize(int, int);
-	void uninitialize(void);
 
 	//local var decl.
 
@@ -152,6 +158,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	//code
 	switch (iMsg)
 	{
+		//we use SETFOCUS & KILLFOCUS so that if while playing game or rendering our program, in middle we switch to other app window
+		//or if a child window like dialog box pop ups, our window should lose the window focus & pause rendering until it regains its focus
+		//and we achieve this by handling below 2 msgs & using gbActiveWindow as a flag in our game loop to control when to render, when to pause
 	case WM_SETFOCUS:
 		gbActiveWindow = TRUE;
 		break;
@@ -161,18 +170,28 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_ERASEBKGND:
-		break;
-		//return(0); //causes some issue in this specific skeleton application, this was applicable in Old Windows version
-		//although it works in all other applications
+		break;	
+		
+		//difference between writing break; vs return(0); here
+		
+		//as this is retained mode graphics there is WM_PAINT to paint i.e no OpenGL or anything to paint right now in this specific code
+		
+		//return(0); //causes some issue in this specific skeleton application, although it works in all other applications where OGL is added to render/paint
 		
 		//What is WM_ERASEBKGND
-		//when you have WM_PAINT there is no need to specially/deliberately erase backgroud or handle erase bkgnd msg
-		//it is done automatically by FERASE member of paintstruct is always true & it does the work
-		//but since we are not using WM_PAINT in this OpenGL skeleton app no one erases bkgnd,
-		//we have to do everything using OpenGL
-		//we also don't want this call to go DefWndProc(), we do not break; we return(0); from here
-		//cause if it goes to DefWndProc(), the OS does the next painting (WM_PAINT internally) i.e erasing bkgnd
-		//we want to erase it using OpenGL/DirectX
+		//when you have WM_PAINT or retained mode graphics there is no need to specially/deliberately erase backgroud or handle erase bkgnd msg
+		//it is done automatically by FERASE member of paintstruct as it is always true & it does the work
+		
+		//but when we are not using WM_PAINT or we are using immediate/rendered mode graphics 
+		//& give something like OpenGL responsibility to paint/render 
+		//there is no need for WM_ERASEBKGND to erase bkgnd & break;,
+		//we have to do everything using OpenGL even erasing background & painting it again
+		//hence by using return(0); we in a way give custom behaviour to WM_ERASEBKND & 
+		//in a way indicate that do not erase backgnd some other method like OpenGL is going to do that
+		
+		//we also don't want this call to go in DefWndProc(), so we do not break; we return(0); from here
+		//cause if it goes to DefWndProc(), the OS does the next painting i.e erasing bkgnd & painting 
+		//(WM_PAINT internally because it is present in UpdateWindow()), we want to erase it using OpenGL/DirectX
 
 	case WM_CHAR:
 		switch (wParam)
@@ -200,6 +219,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_SIZE:	//WM_SIZE comes as soon as a window is resized & hence handling it
+		//each msg/event has different LPARAM WPARAM
+		//when WM_SIZE is received/generated, LOWORD i.e 0-15 bits of its lParam has current width of window
+		//& HIWORD i.e 16-31 bits of lParam has current height of window
 		resize(LOWORD(lParam), HIWORD(lParam));
 		break;
 
@@ -208,7 +230,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_DESTROY:
-		uninitialize();
+		//uninitialize();	putting this function here causes recursion because in uninitialize() we call DestroyWindow() which calls WM_DESTROY
+		//instead put below game loop & above return in WinMain()
 		PostQuitMessage(0);
 		break;
 
@@ -287,7 +310,7 @@ void display(void)
 
 void update(void)
 {
-	//code
+	//code - used in animation
 
 }
 
@@ -304,7 +327,7 @@ void uninitialize(void)
 
 	if (ghwnd)
 	{
-		DestroyWindow(ghwnd);	//we destroy here if in WinMain call to initialize() fails, we can immediately call unintialize() there itself
+		DestroyWindow(ghwnd);	//we destroy here if in WinMain iRetVal = initialize(); fails, we can immediately call unintialize() there itself
 		ghwnd = NULL;
 	}
 

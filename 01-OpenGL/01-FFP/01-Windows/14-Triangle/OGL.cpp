@@ -174,6 +174,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 		}
 	}
 
+	uninitialize();
+
 	return((int)msg.wParam);
 }
 
@@ -183,7 +185,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	//local func decl.
 	void ToggleFullScreen(void);
 	void resize(int, int);
-	void uninitialize(void);
 
 	//local var decl.
 
@@ -200,18 +201,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_ERASEBKGND:
-		//break;
-		return(0); //causes some issue in this specific skeleton application, this was applicable in Old Windows version
-		//although it works in all other applications
-		
-		//What is WM_ERASEBKGND
-		//when you have WM_PAINT there is no need to specially/deliberately erase backgroud or handle erase bkgnd msg
-		//it is done automatically by FERASE member of paintstruct is always true & it does the work
-		//but since we are not using WM_PAINT in this OpenGL skeleton app no one erases bkgnd,
-		//we have to do everything using OpenGL
-		//we also don't want this call to go DefWndProc(), we do not break; we return(0); from here
-		//cause if it goes to DefWndProc(), the OS does the next painting (WM_PAINT internally) i.e erasing bkgnd
-		//we want to erase it using OpenGL/DirectX
+		return(0);
 
 	case WM_CHAR:
 		switch (wParam)
@@ -247,7 +237,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_DESTROY:
-		uninitialize();
 		PostQuitMessage(0);
 		break;
 
@@ -346,7 +335,7 @@ int initialize(void)
 		return(-4);
 
 	//here starts OpenGL code
-	//clear the screen using blue color
+	//clear the screen using black color
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);	//RGBA
 
 	return(0);
@@ -414,7 +403,7 @@ void uninitialize(void)
 
 	if (ghwnd)
 	{
-		DestroyWindow(ghwnd);	//we destroy here if in WinMain call to initialize() fails, we can immediately call unintialize() there itself
+		DestroyWindow(ghwnd);	//we destroy here if in WinMain iRetVal = initialize(); fails, we can immediately call unintialize() there itself
 		ghwnd = NULL;
 	}
 

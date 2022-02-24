@@ -1,6 +1,7 @@
 //Date: 13/02/2022
 //RTR2021 OGL Blue Screen
 
+//painting goes from retained mode to immediate/render mode graphics
 //from this application Window.c is OGL.cpp
 //we are not going to use any special feature of CPP still we use .cpp
 //because after some apps we are going to include a header file which has code in CPP
@@ -28,7 +29,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 //for fullscreen
 HWND ghwnd = NULL;
 HDC ghdc = NULL;
-HGLRC ghrc = NULL;
+HGLRC ghrc = NULL;	//handle to OpenGL Rendering Context
 BOOL gbFullScreen = FALSE;
 
 //for centered window
@@ -174,6 +175,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 		}
 	}
 
+	uninitialize();
+
 	return((int)msg.wParam);
 }
 
@@ -183,7 +186,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	//local func decl.
 	void ToggleFullScreen(void);
 	void resize(int, int);
-	void uninitialize(void);
 
 	//local var decl.
 
@@ -200,16 +202,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_ERASEBKGND:
-		break;
-		//return(0); causes some issue here, this was applicable in Old Windows version
-		//What is WM_ERASEBKGND
-		//when you have WM_PAINT there is no need to specially/deliberately erase backgroud or handle erase bkgnd msg
-		//it is done automatically by FERASE member of paintstruct is always true & it does the work
-		//but since we are not using WM_PAINT in this OpenGL skeleton app no one erases bkgnd,
-		//we have to do everything using OpenGL
-		//we also don't want this call to go DefWndProc(), we do not break; we return(0); from here
-		//cause if it goes to DefWndProc(), the OS does the next painting (WM_PAINT internally) i.e erasing bkgnd
-		//we want to erase it using OpenGL/DirectX
+		return(0);
 
 	case WM_CHAR:
 		switch (wParam)
@@ -245,7 +238,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_DESTROY:
-		uninitialize();
 		PostQuitMessage(0);
 		break;
 
@@ -307,12 +299,13 @@ int initialize(void)
 
 	//code
 	//zeroing/initializing all member of pfd to 0
-	ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
+	ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));	//similar to memset((void*)&pfd, NULL, sizeof(PIXELFORMATDESCRIPTOR));
 
 	//initializing pfd struct
 	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
 	pfd.nVersion = 1;
-	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;	
+	//PFD_SUPPORT_OPENGL tells OS that we are not using WM_PAINT so no BeginPaint DC & its pixel, give us OpenGL wala DC pixel/painter/specialist
 	pfd.iPixelType = PFD_TYPE_RGBA;
 	pfd.cColorBits = 32;
 	pfd.cRedBits = 8;
@@ -345,7 +338,7 @@ int initialize(void)
 
 	//here starts OpenGL code
 	//clear the screen using blue color
-	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);	//RGBA
+	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);	//RGBA here we only tell which color to use when clearing screen, actual clearing happens in display()
 
 	return(0);
 }
@@ -362,14 +355,16 @@ void resize(int width, int height)
 void display(void)
 {
 	//code
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);	//here actual clearing happens with color which was set in initialize(), framebuffer/colorbuffer in VRAM
+
+	//here in between glClear() & SwapBuffers() all game movements/programming happens
 
 	SwapBuffers(ghdc);
 }
 
 void update(void)
 {
-	//code
+	//code - used in animation
 
 }
 
@@ -386,12 +381,12 @@ void uninitialize(void)
 
 	if (wglGetCurrentContext() == ghrc)
 	{
-		wglMakeCurrent(NULL, NULL);
+		wglMakeCurrent(NULL, NULL);		//this call with NULL,NULL tells that takeaway rendering charge from ghrc
 	}
 
 	if (ghrc)
 	{
-		wglDeleteContext(ghrc);
+		wglDeleteContext(ghrc);		//rendering charges are taken away, so delete & clean ghrc
 		ghrc = NULL;
 	}
 
@@ -403,7 +398,7 @@ void uninitialize(void)
 
 	if (ghwnd)
 	{
-		DestroyWindow(ghwnd);	//we destroy here if in WinMain call to initialize() fails, we can immediately call unintialize() there itself
+		DestroyWindow(ghwnd);	//we destroy here if in WinMain iRetVal = initialize(); fails, we can immediately call unintialize() there itself
 		ghwnd = NULL;
 	}
 
