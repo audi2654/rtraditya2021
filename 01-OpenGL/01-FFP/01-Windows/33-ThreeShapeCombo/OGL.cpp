@@ -1,5 +1,6 @@
 //Date: 24/03/2022
-//RTR2021 OGL Hollow Circle Triangle Rectangle Combo on Graph Paper
+//RTR2021 OGL Hollow Circle Triangle Rectangle Combo on Graph Paper 
+//with display toggling for each shape with C, S, T keypress
 
 #define _USE_MATH_DEFINES 1
 
@@ -20,7 +21,6 @@
 //OpenGL libraries
 #pragma comment(lib, "OpenGL32.lib")
 #pragma comment(lib, "glu32.lib")
-
 
 //global func decl.
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -44,6 +44,11 @@ BOOL gbActiveWindow = FALSE;
 
 //for file I/O
 FILE* gpFile = NULL;
+
+//for C, T, S toggling of square circle triangle
+BOOL gbToggleCircle = FALSE;
+BOOL gbToggleSquare = FALSE;
+BOOL gbToggleTriangle = FALSE;
 
 //entry point func
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -187,6 +192,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	void ToggleFullScreen(void);
 	void resize(int, int);
 	void amp_Circle();
+	void display();
 
 	//local var decl.
 	BOOL flag = FALSE;
@@ -214,17 +220,47 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case 'C':
-			if(flag == FALSE)
+		case 'c':
+			if(gbToggleCircle == FALSE)
 			{
-				amp_Circle();
-				flag = TRUE;
+				gbToggleCircle = TRUE;
+				//display();
 			}
-			else
+			else if (gbToggleCircle == TRUE)
 			{
-				flag = FALSE;
+				gbToggleCircle = FALSE;
+				//display();
 			}
+			break;
+
+		case 'T':
+		case 't':
+			if(gbToggleTriangle == FALSE)
+			{
+				gbToggleTriangle = TRUE;
+			}
+			else if (gbToggleTriangle == TRUE)
+			{
+				gbToggleTriangle = FALSE;
+			}
+			break;
+
+		case 'S':
+		case 's':
+			if(gbToggleSquare == FALSE)
+			{
+				gbToggleSquare = TRUE;
+			}
+			else if (gbToggleSquare == TRUE)
+			{
+				gbToggleSquare = FALSE;
+			}
+			break;
 
 		default:
+			gbToggleCircle = FALSE;
+			gbToggleTriangle = FALSE;
+			gbToggleSquare = FALSE;
 			break;
 		}
 		break;
@@ -403,10 +439,21 @@ void display(void)
 	glLineWidth(2.0f);
 	amp_ParallelVerticalLines();
 	amp_ParallelHorizontalLines();
-	amp_Circle();
-	amp_Rectangle();
-	amp_Triangle();
-	
+
+	if(gbToggleCircle == TRUE)
+	{
+		amp_Circle();
+	}
+
+	if(gbToggleSquare == TRUE)
+	{
+		amp_Rectangle();
+	}
+
+	if(gbToggleTriangle == TRUE)
+	{
+		amp_Triangle();
+	}
 
 	SwapBuffers(ghdc);
 }
@@ -538,7 +585,8 @@ void amp_ParallelVerticalLines()
 
 void amp_Triangle()
 {
-	glTranslatef(0.0f, 0.26f, -2.5f);
+	glLoadIdentity();
+	glTranslatef(0.0f, 0.26f, -10.2f);
 	glBegin(GL_LINE_LOOP);
 	glColor3f(1.0f, 1.0f, 0.0f);
 	glVertex3f(0.0f, 1.0f, 0.0f);
