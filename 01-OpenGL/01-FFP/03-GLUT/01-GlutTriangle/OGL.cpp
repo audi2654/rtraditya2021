@@ -1,7 +1,7 @@
 // RTR First Code - GLUT OGL
 // Date: 17th Oct 2021 10:34pm
 
-// Command
+// Command only in 32 bit dev cmd prompt
 // cl.exe /c /EHcs /I C:\RTR2021Files\freeglut\include OGL.cpp	(including here a folder with specific path)
 // link.exe OGL.obj /LIBPATH:C:\RTR2021Files\freeglut\lib freeglut.lib /SUBSYSTEM:CONSOLE
 
