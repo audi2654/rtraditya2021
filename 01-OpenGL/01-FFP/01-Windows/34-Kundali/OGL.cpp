@@ -375,7 +375,7 @@ void display(void)
 	void amp_Triangle();
 	void amp_Circle();
 	void amp_Rectangle();
-	void amp_Kundali();
+	void amp_KundaliQuad();
 
 	//code
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -383,17 +383,11 @@ void display(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glTranslatef(0.0f, 0.0f, -2.5f);
+	glTranslatef(0.0f, 0.0f, -3.0f);
 
-	amp_DotInCentre();
 	glLineWidth(3.0f);
-	amp_VerticalLine(0.0, 1.0, 0.0);
-	amp_HorizontalLine(1.0, 0.0, 0.0);
-	glLineWidth(2.0f);
-	amp_ParallelVerticalLines();
-	amp_ParallelHorizontalLines();
 	amp_Rectangle();
-	
+	amp_KundaliQuad();
 
 	SwapBuffers(ghdc);
 }
@@ -457,6 +451,9 @@ void amp_DotInCentre()
 
 void amp_HorizontalLine(GLfloat r, GLfloat g, GLfloat b)
 {
+	glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -2.0f);
+
 	glBegin(GL_LINES);
 	glColor3f(r, g, b);
 	glVertex3f(-1.0f, 0.0f, 0.0f);
@@ -469,9 +466,9 @@ void amp_VerticalLine(GLfloat r, GLfloat g, GLfloat b)
 {
 	glBegin(GL_LINES);
 	glColor3f(r, g, b);
-	glVertex3f(0.0f, -1.0f, 0.0f);
+	glVertex3f(0.0f, -1.052f, 0.0f);
 	glColor3f(r, g, b);
-	glVertex3f(0.0f, 1.0f, 0.0f);
+	glVertex3f(0.0f, 1.052f, 0.0f);
 	glEnd();
 }
 
@@ -555,17 +552,40 @@ void amp_Circle()
 void amp_Rectangle()
 {
 	//code
-	glTranslatef(0.0f, 0.0f, -5.7f);
+	glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -2.0f);
 	glBegin(GL_LINE_LOOP);
-	glColor3f(1.0f, 1.0f, 0.0f);
-	glVertex3f(-1.0f, 1.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 0.0f);
-	glVertex3f(1.0f, -1.0f, 0.0f);
-	glVertex3f(1.0f, 1.0f, 0.0f);
+	glColor3f(1.000f, 0.647f, 0.000f);
+	glVertex3f(-1.0f, 0.7f, 0.0f);
+	glVertex3f(-1.0f, -0.7f, 0.0f);
+	glVertex3f(1.0f, -0.7f, 0.0f);
+	glVertex3f(1.0f, 0.7f, 0.0f);
 	glEnd();
 }
 
-void amp_Kundali()
+void amp_KundaliQuad()
 {
-	
+	//code
+	glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -2.0f);
+
+	//inside horizontal diamond shape
+	glBegin(GL_LINE_LOOP);
+	glColor3f(1.000f, 0.647f, 0.000f);
+	glVertex3f(0.0f, -0.7f, 0.0f);
+	glVertex3f(-1.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 0.7f, 0.0f);
+	glVertex3f(1.0f, 0.0f, 0.0f);
+	glEnd();
+
+	//diagonals
+	glBegin(GL_LINES);
+	glVertex3f(-1.0f, 0.7f, 0.0f);
+	glVertex3f(1.0f, -0.7f, 0.0f);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex3f(1.0f, 0.7f, 0.0f);
+	glVertex3f(-1.0f, -0.7f, 0.0f);
+	glEnd();
 }
