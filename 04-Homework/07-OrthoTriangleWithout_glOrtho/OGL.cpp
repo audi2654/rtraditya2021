@@ -1,14 +1,11 @@
-//Date: 07/03/2022
-//RTR2021 OGL Perspective Projection Triangle - Temporary Concept Code
-
-//Importance of Model-View Matrix & Identity Matrix in display()
+//Date: 24/03/2022
+//RTR2021 OGL Orthographic Projection Triangle without glOrtho()
 
 //header files
 #include <windows.h>
 #include <stdio.h>			//for file I/O functions
 #include <stdlib.h>			//for exit()
 #include "OGL.h"			//for icon
-#include <GL/glu.h>
 
 //OpenGL header files
 #include <GL/gl.h>
@@ -18,8 +15,6 @@
 
 //OpenGL libraries
 #pragma comment(lib, "OpenGL32.lib")
-#pragma comment(lib, "glu32.lib")
-
 
 //global func decl.
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -43,6 +38,10 @@ BOOL gbActiveWindow = FALSE;
 
 //for file I/O
 FILE* gpFile = NULL;
+
+//for manual transformation
+GLfloat identityMatrix[16];
+GLfloat orthoMatrix[16];
 
 //entry point func
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -101,7 +100,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
 	hwnd = CreateWindowEx(WS_EX_APPWINDOW,
 		szAppName,
-		TEXT("AMP OGL Triangle"),
+		TEXT("AMP OpenGL"),
 		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
 		xWindowPosition,
 		yWindowPosition,
@@ -175,7 +174,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	}
 
 	uninitialize();
-
+	
 	return((int)msg.wParam);
 }
 
@@ -335,6 +334,24 @@ int initialize(void)
 	if (wglMakeCurrent(ghdc, ghrc) == FALSE)
 		return(-4);
 
+	//initialize identity matrix
+	identityMatrix[0] = 1.0f;
+	identityMatrix[1] = 0.0f;
+	identityMatrix[2] = 0.0f;
+	identityMatrix[3] = 0.0f;
+	identityMatrix[4] = 0.0f;
+	identityMatrix[5] = 1.0f;
+	identityMatrix[6] = 0.0f;
+	identityMatrix[7] = 0.0f;
+	identityMatrix[8] = 0.0f;
+	identityMatrix[9] = 0.0f;
+	identityMatrix[10] = 1.0f;
+	identityMatrix[11] = 0.0f;
+	identityMatrix[12] = 0.0f;
+	identityMatrix[13] = 0.0f;
+	identityMatrix[14] = 0.0f;
+	identityMatrix[15] = 1.0f;
+
 	//here starts OpenGL code
 	//clear the screen using blue color
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);	//RGBA
@@ -348,75 +365,124 @@ int initialize(void)
 
 void resize(int width, int height)
 {
+	//local var decl.
+	GLfloat left = 0.0f;
+	GLfloat right = 0.0f;
+	GLfloat bottom = 0.0f;
+	GLfloat top = 0.0f;
+	GLfloat near_pt = 0.0f;
+	GLfloat far_pt = 0.0f;
+	GLfloat tx(0.0f), ty(0.0f), tz(0.0f);
+
 	//code
 	if (height == 0)
 		height = 1;		//we keep compulsorily min val as 1 to avoid divided by 0 in future code calls
 
 	glViewport(0, 0, GLsizei(width), GLsizei(height));
 
-	//Perspective Projection
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
+	//Orthographic Projection
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(identityMatrix);
+
+	if (width <= height)
+	{
+		/*glOrtho(-100.0f,
+			100.0f,
+			(-100.0f * ((GLfloat)height / (GLfloat)width)),
+			(100.0f * ((GLfloat)height / (GLfloat)width)),
+			-100.f,
+			100.0f);*/
+
+		//initializing local vars
+		left = -100.0f;
+		right = 100.0f;
+		bottom = (-100.0f * ((GLfloat)height / (GLfloat)width));
+		top = (100.0f * ((GLfloat)height / (GLfloat)width));
+		near_pt = -100.f;
+		far_pt = 100.f;
+		tx = (right + left) / (right - left);
+		ty = (top + bottom) / (top - bottom);
+		tz = (far_pt + near_pt) / (far_pt - near_pt);
+
+		//initializing orthoMatrix
+		orthoMatrix[0] = 2.0f / (right - left);
+		orthoMatrix[1] = 0.0f;
+		orthoMatrix[2] = 0.0f;
+		orthoMatrix[3] = 0.0f;
+		orthoMatrix[4] = 0.0f;
+		orthoMatrix[5] = 2.0f / (top - bottom);
+		orthoMatrix[6] = 0.0f;
+		orthoMatrix[7] = 0.0f;
+		orthoMatrix[8] = 0.0f;
+		orthoMatrix[9] = 0.0f;
+		orthoMatrix[10] = -2.0f / (far_pt - near_pt);
+		orthoMatrix[11] = 0.0f;
+		orthoMatrix[12] = tx;
+		orthoMatrix[13] = ty;
+		orthoMatrix[14] = tz;
+		orthoMatrix[15] = 1.0f;
+
+		glMultMatrixf(orthoMatrix);
+	}
+	else
+	{
+		/*glOrtho((-100.0f * ((GLfloat)height / (GLfloat)width)),
+			(100.0f * ((GLfloat)height / (GLfloat)width)),
+			-100.0f,
+			100.0f,
+			-100.f,
+			100.0f);*/
+		
+		//initializing local vars
+		left = (-100.0f * ((GLfloat)height / (GLfloat)width));
+		right = (100.0f * ((GLfloat)height / (GLfloat)width));
+		bottom = -100.0f;
+		top = 100.0f;
+		near_pt = -100.f;
+		far_pt = 100.f;
+		tx = (right + left) / (right - left);
+		ty = (top + bottom) / (top - bottom);
+		tz = (far_pt + near_pt) / (far_pt - near_pt);
+		
+		orthoMatrix[0] = 2 / (right - left);
+		orthoMatrix[1] = 0.0f;
+		orthoMatrix[2] = 0.0f;
+		orthoMatrix[3] = 0.0f;
+		orthoMatrix[4] = 0.0f;
+		orthoMatrix[5] = 2 / (top - bottom);
+		orthoMatrix[6] = 0.0f;
+		orthoMatrix[7] = 0.0f;
+		orthoMatrix[8] = 0.0f;
+		orthoMatrix[9] = 0.0f;
+		orthoMatrix[10] = -2 / (far_pt - near_pt);
+		orthoMatrix[11] = 0.0f;
+		orthoMatrix[12] = tx;
+		orthoMatrix[13] = ty;
+		orthoMatrix[14] = tz;
+		orthoMatrix[15] = 1.0f;
+
+		glMultMatrixf(orthoMatrix);
+	}
 }
 
 void display(void)
 {
-	//func decl.
-	void drawColoredTriangle(void);
-	void drawWhiteTriangle(void);
-	void drawWhiteRectangle(void);
-	
 	//code
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glMatrixMode(GL_MODELVIEW);		//Model-View Matrix
-	glLoadIdentity();				//Identity Matrix
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 
-	glTranslatef(0.0f, 0.0f, -9.0f);
-	drawColoredTriangle();
-
-	glTranslatef(2.5f, 0.0f, 0.0f);
-	drawWhiteTriangle();
-
-	glTranslatef(0.0f, 1.5f, 0.0f);
-	drawWhiteRectangle();
-
-	SwapBuffers(ghdc);
-}
-
-void drawColoredTriangle(void)
-{
-	//code
 	glBegin(GL_TRIANGLES);
 	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 1.0f, 0.0f);
+	glVertex3f(0.0f, 50.0f, 0.0f);
 	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 0.0f);
+	glVertex3f(-50.0f, -50.0f, 0.0f);
 	glColor3f(0.0f, 0.0f, 1.0f);
-	glVertex3f(1.0f, -1.0f, 0.0f);
+	glVertex3f(50.0f, -50.0f, 0.0f);
 	glEnd();
-}
 
-void drawWhiteTriangle(void)
-{
-	//code
-	glBegin(GL_TRIANGLES);
-	glVertex3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 0.0f);
-	glVertex3f(1.0f, -1.0f, 0.0f);
-	glEnd();
-}
-
-void drawWhiteRectangle(void)
-{
-	//code
-	glBegin(GL_QUADS);
-	glVertex3f(1.0f, 1.0f, 0.0f);
-	glVertex3f(-1.0f, 1.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 0.0f);
-	glVertex3f(1.0f, -1.0f, 0.0f);
-	glEnd();
+	SwapBuffers(ghdc);
 }
 
 void update(void)
