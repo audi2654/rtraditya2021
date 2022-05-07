@@ -49,6 +49,9 @@ FILE* gpFile = NULL;
 BOOL gbCirclePoints = FALSE;
 BOOL gbCircleLineLoop = FALSE;
 
+//for triangle side length & inscribed circle radius
+GLfloat gfTriangleSideLength = 1.0f;
+
 //entry point func
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
@@ -429,7 +432,7 @@ void display(void)
 	glEnd();
 
 	glLoadIdentity();
-	glTranslatef(0.0f, -0.26f, -3.f);
+	glTranslatef(0.0f, -0.10f, -1.1f);
 	amp_CircleLineLoop();
 
 	SwapBuffers(ghdc);
@@ -564,9 +567,9 @@ void amp_Triangle()
 {
 	glBegin(GL_LINE_LOOP);
 	glColor3f(1.0f, 1.0f, 1.0f);
-	glVertex3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 0.0f);
-	glVertex3f(1.0f, -1.0f, 0.0f);
+	glVertex3f(0.0f, gfTriangleSideLength, 0.0f);
+	glVertex3f(-gfTriangleSideLength, -gfTriangleSideLength, 0.0f);
+	glVertex3f(gfTriangleSideLength, -gfTriangleSideLength, 0.0f);
 	glEnd();
 }
 
@@ -604,7 +607,8 @@ void amp_CircleLineLoop()
 {
 	//local var decl.
 	GLfloat incre = 1.0f;
-	GLfloat radius = 0.47f;
+	//GLfloat radius = 0.47f;
+	GLfloat radius = cbrt(gfTriangleSideLength)/6;
 	
 	//code
 	glBegin(GL_LINE_LOOP);
