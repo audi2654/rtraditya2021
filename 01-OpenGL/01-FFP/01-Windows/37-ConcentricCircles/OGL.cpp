@@ -579,7 +579,7 @@ void amp_CirclePoints()
 	
 	//code
 	glBegin(GL_POINTS);
-	glColor3f(0.0f, 1.0f, 1.0f);
+	//glColor3f(0.0f, 1.0f, 1.0f);
 	for(GLfloat i = 0; i < 360; i = i + incre)
 	{
 		GLfloat X_coordinate = radius * cos(i * M_PI / 180.0f);
@@ -597,7 +597,7 @@ void amp_CircleLineLoop()
 	
 	//code
 	glBegin(GL_LINE_LOOP);
-	glColor3f(1.0f, 1.0f, 0.0f);
+	//glColor3f(1.0f, 1.0f, 0.0f);
 	for(GLfloat i = 0; i < 360; i = i + incre)
 	{
 		GLfloat X_coordinate = radius * cos(i * M_PI / 180.0f);
@@ -618,21 +618,37 @@ void amp_ConcentricCircles()
 	GLfloat numberOfSquares = 10.0f;
 	GLfloat maxSquares = increment * numberOfSquares;
 	GLfloat translateUp = -1.0;
+	GLfloat colorArray[10][3] = {
+								{1.0f, 0.0f, 0.0f},
+							   	{0.0f, 1.0f, 0.0f},
+							   	{0.0f, 0.0f, 1.0f},
+							   	{1.0f, 1.0f, 0.0f},
+							   	{0.0f, 1.0f, 1.0f},
+							   	{1.0f, 0.0f, 1.0f},
+							   	{1.0f, 1.0f, 1.0f},
+							   	{0.5f, 0.5f, 0.5f},
+								{1.0f, 0.31f, 0.0f},
+								{0.31f, 0.15f, 0.51f},
+							};
+
+	GLint j = 0;
 
 	//code
-	for(i; i <= maxSquares; i += increment)
+	for(i, j; i <= maxSquares, j < 10; i += increment, j++)
 	{
 		glLoadIdentity();
 		glTranslatef(0.0f, 0.0f, -3.0f);
 		glScalef(i, i, 0.0f);
 
+		glColor3fv(colorArray[j]);
 		if(gbCirclePoints == TRUE)
 		{
-			
+			glColor3fv(colorArray[j]);
 			amp_CirclePoints();
 		}
 		else if(gbCircleLineLoop == TRUE)
-		{
+		{	
+			glColor3fv(colorArray[j]);
 			amp_CircleLineLoop();
 		}
 		translateUp += 0.1;
