@@ -1,7 +1,7 @@
-// RTR2021 Window Centered
+// RTR2021 Window Centered using GetSystemMetrics
 
-// cl.exe /c /EHsc Window.c
-// link.exe Window.obj /SUBSYSTEM:WINDOWS
+// cl.exe /c /EHsc WindowCentered.c
+// link.exe WindowCentered.obj /SUBSYSTEM:WINDOWS
 
 // header files
 #include <Windows.h>
@@ -56,7 +56,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     yWindowPosition = (cyScreenHeight / 2) - (cyWindowHeight / 2);
 
     hwnd = CreateWindow(szAppName,
-                        TEXT("Aditya RTR Centered Window"),
+                        TEXT("Aditya RTR Centered Window using GetSystemMetrics"),
                         WS_OVERLAPPEDWINDOW,
                         xWindowPosition,
                         yWindowPosition,
@@ -90,7 +90,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
     HDC hdc;
     PAINTSTRUCT ps;
     RECT rc;
-    TCHAR str[] = TEXT("Aditya's Centered Window");
+    TCHAR str[] = TEXT("Aditya's Centered Window using GetSystemMetrics");
     TCHAR str2[255];
 
     // code
