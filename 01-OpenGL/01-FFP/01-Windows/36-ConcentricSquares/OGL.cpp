@@ -527,7 +527,7 @@ void amp_Rectangle()
 {
 	//code
 	glBegin(GL_LINE_LOOP);
-	glColor3f(1.0f, 1.0f, 0.0f);
+	//glColor3f(1.0f, 1.0f, 0.0f);
 	glVertex3f(-1.0f, 1.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, 0.0f);
@@ -546,13 +546,28 @@ void amp_ConcentricSquares()
 	GLfloat numberOfSquares = 10.0f;
 	GLfloat maxSquares = increment * numberOfSquares;
 	GLfloat translateUp = -1.0;
+	GLfloat colorArray[10][3] = {
+								{1.0f, 0.0f, 0.0f},
+							   	{0.0f, 1.0f, 0.0f},
+							   	{0.0f, 0.0f, 1.0f},
+							   	{1.0f, 1.0f, 0.0f},
+							   	{0.0f, 1.0f, 1.0f},
+							   	{1.0f, 0.0f, 1.0f},
+							   	{1.0f, 1.0f, 1.0f},
+							   	{0.5f, 0.5f, 0.5f},
+								{1.0f, 0.31f, 0.0f},
+								{0.31f, 0.15f, 0.51f},
+							};
+
+	GLint j = 0;
 
 	//code
-	for(i; i <= maxSquares; i += increment)
+	for(i, j; i <= maxSquares, j < 10; i += increment, j++)
 	{
 		glLoadIdentity();
 		glTranslatef(0.0f, 0.0f, -10.f);
 		glScalef(i, i, 0.0f);
+		glColor3fv(colorArray[j]);
 		amp_Rectangle();
 		translateUp += 0.1;
 	}
