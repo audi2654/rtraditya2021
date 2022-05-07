@@ -515,7 +515,7 @@ void amp_Triangle()
 	// glTranslatef(0.0f, 0.0f, -10.f);
 	// glScalef(0.5f, 0.5f, 0.0f);
 	glBegin(GL_LINE_LOOP);
-	glColor3f(1.0f, 1.0f, 0.0f);
+	//glColor3f(1.0f, 1.0f, 0.0f);
 	glVertex3f(0.0f, 1.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, 0.0f);
@@ -533,13 +533,28 @@ void amp_ConcentricTriangles()
 	GLfloat numberOfTriangles = 10.0f;
 	GLfloat maxTriangles = increment * numberOfTriangles;
 	GLfloat translateUp = -1.0;
+	GLfloat colorArray[10][3] = {
+								{1.0f, 0.0f, 0.0f},
+							   	{0.0f, 1.0f, 0.0f},
+							   	{0.0f, 0.0f, 1.0f},
+							   	{1.0f, 1.0f, 0.0f},
+							   	{0.0f, 1.0f, 1.0f},
+							   	{1.0f, 0.0f, 1.0f},
+							   	{1.0f, 1.0f, 1.0f},
+							   	{0.5f, 0.5f, 0.5f},
+								{1.0f, 0.31f, 0.0f},
+								{0.31f, 0.15f, 0.51f},
+							};
 
+	GLint j = 0;
+	
 	//code
-	for(i; i <= maxTriangles; i += increment)
+	for(i, j; i <= maxTriangles, j < 10; i += increment, j++)
 	{
 		glLoadIdentity();
 		glTranslatef(0.0f, translateUp, -10.f);
 		glScalef(i, i, 0.0f);
+		glColor3fv(colorArray[j]);
 		amp_Triangle();
 		translateUp += 0.1;
 	}
