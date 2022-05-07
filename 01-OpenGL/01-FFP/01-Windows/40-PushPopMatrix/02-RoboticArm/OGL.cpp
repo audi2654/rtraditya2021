@@ -453,7 +453,7 @@ void display(void)
 
 	glPushMatrix();		//pushes CTM on MVM stack : State-3
 
-	glScalef(2.0f, 0.5f, 1.0f);
+	glScalef(2.0f, 0.4f, 1.0f);
 
 	//now draw the elbow
 	//create quadric (the bowl)
@@ -461,8 +461,8 @@ void display(void)
 
 	glColor3f(0.4f, 0.9f, 1.0f);
 
-	//draw sphere for earth
-	gluSphere(quadric, 0.6f, 10, 10);
+	//draw sphere for elbow
+	gluSphere(quadric, 0.6f, 10, 10);		//-----------change elbow size
 
 	glPopMatrix(); 	//pops the saved CTM State-3 & makes it as new CTM
 	glPopMatrix(); 	//pops the saved CTM State-1 & makes it as new CTM
