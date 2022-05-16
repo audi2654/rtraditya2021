@@ -435,6 +435,7 @@ void display(void)
 	void amp_N();
 	void amp_D();
 	void amp_A();
+	void amp_F();
 	void amp_M();
 	void amp_P();
 	void amp_PlaneMiddle(GLfloat smokeArray[3]);
@@ -1002,6 +1003,49 @@ void amp_A()
 	glEnd();
 }
 
+void amp_F()
+{
+//vertical line of F 
+	//top quad
+	glBegin(GL_QUADS);
+	glColor3f(1.0, 0.60, 0.20);			//saffron
+	glVertex3f(-0.5f, 1.0f, 0.f);
+	glVertex3f(-0.9f, 1.0f, 0.f);
+	glColor3f(1.0, 1.0, 1.0);			//white
+	glVertex3f(-0.9f, 0.0f, 0.f);
+	glVertex3f(-0.5f, 0.0f, 0.f);
+	glEnd();
+
+	//lower quad
+	glBegin(GL_QUADS);
+	glColor3f(1.0, 1.0, 1.0);			//white
+	glVertex3f(-0.5f, 0.0f, 0.f);
+	glVertex3f(-0.9f, 0.0f, 0.f);
+	glColor3f(0.19, 0.9, 0.08);			//india green
+	glVertex3f(-0.9f, -1.0f, 0.f);
+	glVertex3f(-0.5f, -1.0f, 0.f);
+	glEnd();
+
+//upper horizontal line of F
+	glBegin(GL_QUADS);
+	glColor3f(1.0, 0.60, 0.20);			//saffron
+	glVertex3f(.9f, 1.3f, 0.f);
+	glVertex3f(-.9f, 1.3, 0.f);
+	glVertex3f(-.9f, 1.0f, 0.f);
+	glVertex3f(.9f, 1.0f, 0.f);
+	glEnd();
+
+//lower horizontal line of F
+	glBegin(GL_QUADS);
+	glColor3f(1.0, 1.0, 1.0);			//white
+	glVertex3f(0.5f, 0.4f, 0.f);
+	glVertex3f(-.9f, 0.4f, 0.f);
+	glVertex3f(-.9f, 0.1f, 0.f);
+	glVertex3f(.5f, 0.1f, 0.f);
+	
+	glEnd();
+}
+
 void amp_M()
 {
 //1st left most quad of M / 
@@ -1229,5 +1273,5 @@ void amp_PlaneMiddle(GLfloat smokeArray[3])
 	//drawing F inside triangle
 	//glScalef(0.90, 0.90, 0.0);
 	glTranslatef(5.2, 0.0, 0.0);
-	amp_I();
+	amp_F();
 }
