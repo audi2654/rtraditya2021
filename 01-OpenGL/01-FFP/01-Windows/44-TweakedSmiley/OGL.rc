@@ -1,3 +1,0 @@
-#include "OGL.h"
-AMP_MYICON ICON ampIcon.ico
-IDBITMAP_SMILEY BITMAP smiley.bmp
