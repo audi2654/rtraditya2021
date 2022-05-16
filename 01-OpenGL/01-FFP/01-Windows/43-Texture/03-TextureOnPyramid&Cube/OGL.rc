@@ -1,0 +1,4 @@
+#include "OGL.h"
+AMP_MYICON ICON ampIcon.ico
+IDBITMAP_KUNDALI BITMAP vijay_kundali.bmp
+IDBITMAP_STONE BITMAP stone.bmp
