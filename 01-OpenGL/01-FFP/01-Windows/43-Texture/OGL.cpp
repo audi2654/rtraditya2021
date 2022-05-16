@@ -1,5 +1,6 @@
 //Date: 24/04/2022
 //RTR2021 OGL TEXTURED Perspective Projection Blue Screen - Two3DShapes Rotation
+//Texture of stone on Pyramid & kundali on Cube
 
 //header files
 #include <windows.h>
@@ -412,28 +413,45 @@ void display(void)
 
 	glTranslatef(-1.5f, 0.0f, -6.0f);
 	glRotatef(anglePyramid, 0.0f, 1.0f, 0.0f);		//y axis spin rotation
+
+	//texture related code
+	glBindTexture(GL_TEXTURE_2D, texture_stone);
+
+
 	glBegin(GL_TRIANGLES);
 	//3D shapes che coordinates detana, sides/faces la TUMCHYA samor nai aanaich, TUMHI swatah tya tya face/side samor jaych
 	//ek side la colors pn aju baju chya sides la lakshat theun dayche
 	
 	//front face
+	glTexCoord2f(0.5f, 1.0f);
 	glVertex3f(0.0f, 1.0f, 0.0f);		//apex
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, 1.0f);		//frontFace leftBottom
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, 1.0f);		//frontFace rightBottom
 
 	//right face
+	glTexCoord2f(0.5f, 1.0f);
 	glVertex3f(0.0f, 1.0f, 0.0f);		//apex
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, 1.0f);		//rightFace leftBottom = frontFace rightBottom
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, -1.0f);		//rightFace rightBottom
 
 	//back face
+	glTexCoord2f(0.5f, 1.0f);
 	glVertex3f(0.0f, 1.0f, 0.0f);		//apex
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, -1.0f);		//backFace leftBottom = rightFace rightBottom
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, -1.0f);	//backFace rightBottom
 
 	//left face
+	glTexCoord2f(0.5f, 1.0f);
 	glVertex3f(0.0f, 1.0f, 0.0f);		//apex
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, -1.0f);	//leftFace leftBottom = backFace rightBottom
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, 1.0f);		//leftFace rightBottom = frontFace leftBottom
 	glEnd();
 
@@ -442,41 +460,68 @@ void display(void)
 	glTranslatef(1.5f, 0.0f, -6.0f);
 	glScalef(0.75f, 0.75f, 0.75f);
 	glRotatef(angleCube, 1.0f, 1.0f, 1.0f);		//all triaxis rotation
+
+	glBindTexture(GL_TEXTURE_2D, texture_kundali);
+
 	glBegin(GL_QUADS);
 	//front face
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(1.0f, 1.0f, 1.0f);		//Right Top
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(-1.0f, 1.0f, 1.0f);		//Left Top
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, 1.0f);		//Left Bottom
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, 1.0f);		//Right Bottom
 
 	//right face
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(1.0f, 1.0f, -1.0f);		//rightFace rightTop
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(1.0f, 1.0f, 1.0f);		//rightFace leftTop = frontFace rightTop
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, 1.0f);		//rightFace leftBottom = frontFace rightBottom
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, -1.0f);		//rightFace rightBottom
 
 	//back face
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(-1.0f, 1.0f, -1.0f);		//backFace rightTop
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(1.0f, 1.0f, -1.0f);		//backFace leftTop = rightFace rightTop
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, -1.0f);		//backFace leftBottom = rightFace rightBottom
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, -1.0f);	//backFace rightBottom
 
 	//left face
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(-1.0f, 1.0f, 1.0f);		//leftFace rightTop	= frontFace leftTop
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(-1.0f, 1.0f, -1.0f);		//leftFace leftTop = backFace rightTop
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, -1.0f);	//leftFace leftBottom = backFace rightBottom
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, 1.0f);		//leftFace rightBottom = frontFace leftBottom
 
 	//top face
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(1.0f, 1.0f, -1.0f);		//topFace rightTop = rightFace rightTop = backFace leftTop
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(-1.0f, 1.0f, -1.0f);		//topFace leftTop = backFace rightTop
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-1.0f, 1.0f, 1.0f);		//topFace leftBottom = leftFace rightTop = frontFace leftTop
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1.0f, 1.0f, 1.0f);		//topFace rightBottom = rightFace leftTop = frontFace rightTop
 
 	//bottom face
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(1.0f, -1.0f, -1.0f);		//bottomFace rightTop = rightFace rightBottom = backFace leftBottom
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(-1.0f, -1.0f, -1.0f);	//bottomFace leftTop = leftFace leftBottom = backFace rightBottom
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, 1.0f);		//bottomFace leftBottom = leftFace rightBottom = frontFace leftBottom
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, 1.0f);		//bottomFace rightBottom = rightFace leftBottom = frontFace rightBottom
 	
 	glEnd();
@@ -540,6 +585,10 @@ void uninitialize(void)
 		fclose(gpFile);
 		gpFile = NULL;
 	}
+
+	glDeleteTextures(1, &texture_stone);
+	glDeleteTextures(1, &texture_kundali);
+
 }
 
 //definition for user defined function
@@ -561,7 +610,7 @@ BOOL LoadGlTexture(GLuint* texture, TCHAR ImageResourceID[])
 		GetObject(hbitmap, sizeof(BITMAP), &bmp);
 
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-		//here we tell to unpack the pixels & arrange them in aligned manner of
+		//here we tell to unpack the pixels & arrange them in aligned manner of rows of 4 bits
 		//4 types that is RGBA
 
 		glGenTextures(1, texture);		//5th step
@@ -571,14 +620,18 @@ BOOL LoadGlTexture(GLuint* texture, TCHAR ImageResourceID[])
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); //7th step
 		//when texture is near to viewer we tell OGL to draw it with magnified/maximum details
 
-		glTextParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //7th step
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //7th step
 		//when texture is far from viewer we tell OGL to draw it with minimum details
 		//for less load on OGL machine & increase performance
 
 		//creating the actual texture
 		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, bmp.bmWidth, bmp.bmHeight, GL_BGR_EXT, GL_UNSIGNED_BYTE, bmp.bmBits);
+		//not avaiable in OGL PP, wrapper function for glTextImage2D() & glGenerateMipMaps()
 
-		
-	
+		glBindTexture(GL_TEXTURE_2D, 0);	//8th step
+
+		DeleteObject(hbitmap);		//9th step
 	}
+
+	return(bResult);
 }
