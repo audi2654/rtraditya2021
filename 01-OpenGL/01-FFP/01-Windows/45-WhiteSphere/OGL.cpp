@@ -392,7 +392,7 @@ void display(void)
 	//beautification
 	//glColor3f(1.0f, 1.0f, 0.0f);
 
-	//drawing the sphere for Sun
+	//drawing the sphere
 	gluSphere(quadric, 1.0f, 50, 50);		//parameters - bowl to draw in, radius, no of vertical slices, no of horizontal stacks
 	//varying the number of slices & stacks of a quadric will have effect on its light effect too
 
