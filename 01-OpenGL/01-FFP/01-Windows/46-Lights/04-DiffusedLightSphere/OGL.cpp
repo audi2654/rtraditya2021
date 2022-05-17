@@ -423,7 +423,11 @@ void display(void)
 	//beautification
 	//glColor3f(1.0f, 1.0f, 0.0f);
 
-	//drawing the sphere for Sun
+	//in case of sphere we don't need to explicitly calculate or give normal to each surface like in case of cube using glNormal()
+	//because for sphere GLU library gluSphere() internally calculates all the normals for all vertices, easing our job of lighting
+	//although there is a separate function gluQuadricNormal() to create normals for sphere vertices, but no need to it
+
+	//drawing the sphere
 	gluSphere(quadric, 1.0f, 50, 50);		//parameters - bowl to draw in, radius, no of vertical slices, no of horizontal stacks
 	//varying the number of slices & stacks of a quadric will have effect on its light effect too
 
