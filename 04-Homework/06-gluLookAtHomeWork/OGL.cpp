@@ -1,6 +1,8 @@
 //Date: 13/03/2022
 //RTR2021 OGL Colored Perspective Projection Blue Screen - Two3DShapes Rotation
-//moving without gluLookAt()
+//moving with only gluLookAt()
+
+#define _USE_MATH_DEFINES
 
 //header files
 #include <windows.h>
@@ -8,6 +10,7 @@
 #include <stdlib.h>			//for exit()
 #include "OGL.h"			//for icon
 #include <GL/glu.h>
+#include <math.h>			//for sin cos
 
 //OpenGL header files
 #include <GL/gl.h>
@@ -46,6 +49,13 @@ FILE* gpFile = NULL;
 //for 2D rotation
 float anglePyramid = 0.0f;
 float angleCube = 0.0f;
+
+GLfloat X_coordinate = 0.0f;
+GLfloat Y_coordinate = 0.0f;
+
+GLfloat incre = 1.0f;
+GLfloat radius = 12.0f;
+GLfloat i = 0.0f;
 
 //entry point func
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -383,9 +393,13 @@ void display(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glTranslatef(0.0f, 0.0f, -18.0f);
-	glRotatef(anglePyramid, 0.0f, 1.0f, 0.0f);		//y axis spin rotation
-	gluLookAt(0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+	//glTranslatef(0.0f, 0.0f, -10.0f);
+	
+	//glRotatef(anglePyramid, 0.0f, 1.0f, 0.0f);		//y axis spin rotation
+
+	//need to do it only using gluLookAt() without above 2 transformations
+	gluLookAt(0.0f, 5.0f, 10.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	
 	glBegin(GL_TRIANGLES);
 	//3D shapes che coordinates detana, sides/faces la TUMCHYA samor nai aanaich, TUMHI swatah tya tya face/side samor jaych
 	//ek side la colors pn aju baju chya sides la lakshat theun dayche
@@ -425,9 +439,17 @@ void display(void)
 
 	glLoadIdentity();
 
-	glTranslatef(0.0f, 0.0f, -20.0f);
-	glScalef(0.75f, 0.75f, 0.75f);
-	glRotatef(angleCube, 1.0f, 1.0f, 1.0f);		//all triaxis rotation
+	//cube
+
+	//glTranslatef(0.0f, 0.0f, -5.0f);
+	//glRotatef(angleCube, 0.0f, 1.0f, 0.0f);		//all triaxis rotation
+
+	gluLookAt(X_coordinate, 5.0f, Y_coordinate, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	//gluLookAt(0.0f, 0.0f, 15.0f, 30.0f, 0.0f, 0.0f, 0.0f, 1.0, 0.0f);
+
+	glTranslatef(0.0f, 0.0f, -5.0f);
+	glScalef(0.7f, 0.7f, 0.7f);
+
 	glBegin(GL_QUADS);
 	//front face
 	glColor3f(1.0f, 0.0f, 0.0f);
@@ -479,17 +501,27 @@ void display(void)
 void update(void)
 {
 	//code
-	anglePyramid = anglePyramid + 0.1f;
+	anglePyramid = anglePyramid + 0.01f;
 	/*if(anglePyramid >= 360.0f)
 	{
 		anglePyramid = anglePyramid - 360.0f;
 	}*/
 	
-	angleCube = angleCube + 0.1f;
+	angleCube = angleCube + 0.07f;
 	if(angleCube >= 360.0f)
 	{
 		angleCube = angleCube - 360.0f;
 	}
+
+	X_coordinate = radius * cos(i * M_PI / 180.0f);
+	Y_coordinate = radius * sin(i * M_PI / 180.0f);
+
+	if(i == 360.0f)
+	{
+		i = 0.0f;
+	}
+
+	i = i + 0.07f;
 }
 
 void uninitialize(void)
