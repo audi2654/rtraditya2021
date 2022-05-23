@@ -58,13 +58,16 @@ GLfloat gMoveTriangleX = -2.7f;
 GLfloat gMoveTriangleY = -1.8f;
 BOOL gbMoveTriangleFlag = FALSE;
 
-GLfloat gMoveCircleX = 2.4f;
-GLfloat gMoveCircleY = -1.5f;
+GLfloat gMoveCircleX = 1.0f;
+GLfloat gMoveCircleY = -0.5f;
 BOOL gbMoveCircleFlag = FALSE;
 
 GLfloat gMoveLineX = 0.0f;
 GLfloat gMoveLineY = 1.7f;
 BOOL gbMoveLineFlag = FALSE;
+
+//for triangle side length & inscribed circle radius
+GLfloat gfTriangleSideLength = 1.0f;
 
 //entry point func
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -285,8 +288,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				else if(gbMoveCircleFlag == TRUE)
 				{
 					gbMoveCircleFlag = FALSE;
-					gMoveCircleX = 2.4f;
-					gMoveCircleY = -1.5f;
+					gMoveCircleX = 1.0f;
+					gMoveCircleY = -0.5f;
 				}
 			}
 			break;
@@ -528,7 +531,7 @@ void display(void)
 		glTranslatef(gMoveTriangleX, gMoveTriangleY, -7.f);
 	else if(gbMoveTriangleFlag == FALSE)
 		glTranslatef(-2.7f, -1.8f, -7.f);
-	glScalef(1.1f, 1.f, 0.0f);
+	glScalef(1.1f, 1.f, 0.0f);						//-----why removing this causes the view of triangle get somewhat angled
 	glRotatef(gAngleTriangle, 0.0f, 1.0f, 0.0f);
 	amp_Triangle();
 
@@ -549,9 +552,9 @@ void display(void)
 	glLoadIdentity();
 	//glTranslatef(0.0f, -0.26f, -5.2f);
 	if(gbMoveCircleFlag == TRUE)
-		glTranslatef(gMoveCircleX, gMoveCircleY, -5.2f);
+		glTranslatef(gMoveCircleX, gMoveCircleY, -1.8f);
 	else if(gbMoveCircleFlag == FALSE)
-		glTranslatef(2.4f, -1.5f, -5.2f);
+		glTranslatef(1.0f, -0.5f, -1.8f);
 	glRotatef(gAngleCircle, 0.0f, 1.0f, 0.0f);
 	amp_CircleLineLoop();
 
@@ -599,9 +602,9 @@ void update(void)
 			gMoveCircleX = gMoveCircleX - 0.0001f;
 		}
 
-		if(gMoveCircleY >= -0.26f)
+		if(gMoveCircleY >= -0.09f)
 		{
-			gMoveCircleY = -0.26f;
+			gMoveCircleY = -0.09f;
 		}
 		else
 		{
@@ -756,9 +759,9 @@ void amp_Triangle()
 {
 	glBegin(GL_LINE_LOOP);
 	glColor3f(1.0f, 1.0f, 1.0f);
-	glVertex3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 0.0f);
-	glVertex3f(1.0f, -1.0f, 0.0f);
+	glVertex3f(0.0f, gfTriangleSideLength, 0.0f);
+	glVertex3f(-gfTriangleSideLength, -gfTriangleSideLength, 0.0f);
+	glVertex3f(gfTriangleSideLength, -gfTriangleSideLength, 0.0f);
 	glEnd();
 }
 
@@ -778,8 +781,9 @@ void amp_CirclePoints()
 {
 	//local var decl.
 	GLfloat incre = 1.0f;
-	GLfloat radius = 0.3f;
-	
+	//GLfloat radius = 0.3f;
+	GLfloat radius = cbrt(gfTriangleSideLength)/6;
+
 	//code
 	glBegin(GL_POINTS);
 	glColor3f(0.0f, 1.0f, 1.0f);
@@ -796,7 +800,8 @@ void amp_CircleLineLoop()
 {
 	//local var decl.
 	GLfloat incre = 1.0f;
-	GLfloat radius = 0.47f;
+	//GLfloat radius = 0.47f;
+	GLfloat radius = cbrt(gfTriangleSideLength)/6;
 	
 	//code
 	glBegin(GL_LINE_LOOP);
