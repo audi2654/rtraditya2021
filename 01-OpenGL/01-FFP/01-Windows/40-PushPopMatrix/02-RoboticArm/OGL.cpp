@@ -369,7 +369,10 @@ int initialize(void)
 	glDepthFunc(GL_LEQUAL);
 		//above 3 lines are must, below 2 lines are optional
 	glShadeModel(GL_SMOOTH);
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); 
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	//create quadric (the bowl)
+	quadric = gluNewQuadric();
 	
 	//warm up resize call
 	//without this maroon or brownish window comes first
@@ -429,9 +432,6 @@ void display(void)
 	glScalef(2.0f, 0.5f, 1.0f);
 
 	//now draw the arm
-	//create quadric (the bowl)
-	quadric = gluNewQuadric();
-
 	glColor3f(0.5f, 0.35f, 0.05f);
 
 	//now we draw sphere for arm, we've scaled it above in such a way that it looks like ellipse shoulder
@@ -456,13 +456,10 @@ void display(void)
 	glScalef(2.0f, 0.4f, 1.0f);
 
 	//now draw the elbow
-	//create quadric (the bowl)
-	quadric = gluNewQuadric();
-
 	glColor3f(0.4f, 0.9f, 1.0f);
 
 	//draw sphere for elbow
-	gluSphere(quadric, 0.6f, 10, 10);		//-----------change elbow size
+	gluSphere(quadric, 0.6f, 10, 10);
 
 	glPopMatrix(); 	//pops the saved CTM State-3 & makes it as new CTM
 	glPopMatrix(); 	//pops the saved CTM State-1 & makes it as new CTM
@@ -508,6 +505,12 @@ void uninitialize(void)
 	{
 		DestroyWindow(ghwnd);	//we destroy here if in WinMain iRetVal = initialize(); fails, we can immediately call unintialize() there itself
 		ghwnd = NULL;
+	}
+
+	if (quadric)
+	{
+		gluDeleteQuadric(quadric);
+		quadric = NULL;
 	}
 
 	if (gpFile)
