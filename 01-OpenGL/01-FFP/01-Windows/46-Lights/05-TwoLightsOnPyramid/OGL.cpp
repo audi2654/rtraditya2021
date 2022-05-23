@@ -49,16 +49,16 @@ float anglePyramid = 0.0f;
 //for light
 BOOL gbLight = FALSE;
 
-//light 1
+//light 0
 GLfloat gfLightAmbientZero[] = { 0.0f, 0.0f, 0.0f, 1.0f };	//4th value 1.0f or 0.0f doesn't matter because here we don't consider blending
 GLfloat gfLightDiffuseZero[] = { 1.0f, 0.0f, 0.0f, 1.0f };	//red
 GLfloat gfLightSpecularZero[] = { 1.0f, 0.0f, 0.0f, 1.0f };	//red
-GLfloat gfLightPositionZero[] = { -2.0f, 0.0f, 0.0f, 1.0f };
+GLfloat gfLightPositionZero[] = { -2.0f, 0.0f, 0.0f, 1.0f }; //4th value here tells type of light 1.0f for positional light & 0.0f for directional light
 
-//light 3
+//light 1
 GLfloat gfLightAmbientOne[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 GLfloat gfLightDiffuseOne[] = { 0.0f, 0.0f, 1.0f, 1.0f };	//blue
-GLfloat gfLightSpecularOne[] = { 0.0f, 0.0f, 1.0f, 1.0f };	//red
+GLfloat gfLightSpecularOne[] = { 0.0f, 0.0f, 1.0f, 1.0f };	//blue
 GLfloat gfLightPositionOne[] = { 2.0f, 0.0f, 0.0f, 1.0f };
 
 //material properties
