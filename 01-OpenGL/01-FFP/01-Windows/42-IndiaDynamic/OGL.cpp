@@ -241,6 +241,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	//code
 	switch (iMsg)
 	{
+	case WM_CREATE:
+		PlaySound(MAKEINTRESOURCE(AMP_MYAUDIO), NULL, SND_RESOURCE | SND_ASYNC | SND_NODEFAULT);
+		break;
+
 	case WM_SETFOCUS:
 		gbActiveWindow = TRUE;
 		break;
@@ -409,7 +413,8 @@ int initialize(void)
 	//ToggleFullScreen();	//to start program in fullscreen
 
 	//start song
-	PlaySound(TEXT("audiofile.wav"), GetModuleHandle(NULL), SND_ASYNC | SND_NODEFAULT);
+	//PlaySound(TEXT("audiofile.wav"), GetModuleHandle(NULL), SND_ASYNC | SND_NODEFAULT);
+	//see WM_CREATE to see PlaySound with audio resource
 
 	return(0);
 }
