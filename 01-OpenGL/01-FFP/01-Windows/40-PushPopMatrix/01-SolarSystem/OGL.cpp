@@ -412,7 +412,7 @@ void display(void)
 	//when you push a CTM on MVM or Projection matrix stack, a copy of CTM is created & then pushed on the respective matrix
 	//if glRotate(), glTranslate, glScale() are used then stack is of MVM
 	//if glOrtho(), glFrustum or gluPerspective() are used then stack is of Projection matrix
-	//OpenGL specification approach : read book notes from 4 Apr 2022, Day - 54
+	//OpenGL specification approach : read book notes from 3 Apr 2022, Day - 54
 
 	//beautification - 1
 	glRotatef(90.f, 1.0f, 0.0f, 0.0f);		//this is for Sun, we write here but in anyway Sun doesn't rotate
@@ -435,7 +435,7 @@ void display(void)
 	glPopMatrix();		//pops the saved CTM State-1 & makes it as new CTM
 	//For glPopMatrix();
 	//Redbook approach : CTM is detroyed & popped matrix becomes the new CTM
-	//OpenGL specification approach : read book notes from 4 Apr 2022, Day - 54 
+	//OpenGL specification approach : read book notes from 3 Apr 2022, Day - 54 
 
 	//Earth related code starts from here
 	
