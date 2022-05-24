@@ -419,7 +419,7 @@ void display(void)
 	//when you push a CTM on MVM or Projection matrix stack, a copy of CTM is created & then pushed on the respective matrix
 	//if glRotate(), glTranslate, glScale() are used then stack is of MVM
 	//if glOrtho(), glFrustum or gluPerspective() are used then stack is of Projection matrix
-	//OpenGL specification approach : read book notes from 4 Apr 2022, shoulder - 54
+	//OpenGL specification approach : read book notes from 3 Apr 2022, Day - 54
 
 	//to achieve revolution of total hand around shoulder point
 	glRotatef((GLfloat)shoulder, 0.0f, 0.0f, 1.0f);
@@ -428,7 +428,7 @@ void display(void)
 	glPushMatrix(); 	//pushes CTM on MVM stack : State-2
 
 	//now we wanna make shoulder of 2 units but we translate by only 1 unit as above & scale on -x & +x axis 
-	//by 1-1 unit to have total of 2 units
+	//by 1-1 unit to have total of 2 units, also we use this scaling here to turn sphere into ellipse
 	glScalef(2.0f, 0.5f, 1.0f);
 
 	//now draw the arm
@@ -443,7 +443,7 @@ void display(void)
 	glPopMatrix();		//pops the saved CTM State-2 & makes it as new CTM
 	//For glPopMatrix();
 	//Redbook approach : CTM is detroyed & popped matrix becomes the new CTM
-	//OpenGL specification approach : read book notes from 4 Apr 2022, shoulder - 54 
+	//OpenGL specification approach : read book notes from 3 Apr 2022, Day - 54
 
 	//for elbow spinning rotation around shoulder
 	glTranslatef(1.0f, 0.0f, 0.0f);
