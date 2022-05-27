@@ -1,5 +1,5 @@
 //Date: 05/05/2022
-//RTR2021 OGL Procedural/Mathematical Texture on 2D Geometry
+//RTR2021 OGL Checkerboard Procedural/Mathematical Texture on 2D Geometry
 
 //header files
 #include <windows.h>
@@ -493,6 +493,9 @@ void LoadGlTexture(void)
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERBOARD_WIDTH, CHECKERBOARD_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, gubaCheckerboard);	//will cause some little problem in Android, WebGL, DirectX
 	
+	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);	
+	//texture environment setting is already done by FFP using PP internally, so this function makes no difference
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
