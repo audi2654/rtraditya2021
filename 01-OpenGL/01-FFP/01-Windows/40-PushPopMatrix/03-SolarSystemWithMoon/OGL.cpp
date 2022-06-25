@@ -441,7 +441,7 @@ void display(void)
 
 	//first view/camera transformation
 	//changing only eye coordinates to get better view
-	gluLookAt(0.0f, 4.0f, 4.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	gluLookAt(0.0f, 0.0f, 4.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
 	//now at this moment CTM is with all the changes made above in modelview matrix (MVM)
 	//in order to come back to this CTM, save it by pushing it on MVM stack
