@@ -400,16 +400,16 @@ void uninitialize(void)
     	glxContext = NULL;
     }
     
+     if(fullscreen == True)
+    {
+        toggleFullscreen();
+        fullscreen = False;
+    }
+    
     if(visualInfo)
     {
     	free(visualInfo);
     	visualInfo = NULL;
-    }
-    
-    if(fullscreen == True)
-    {
-        toggleFullscreen();
-        fullscreen = False;
     }
     
     if(window)

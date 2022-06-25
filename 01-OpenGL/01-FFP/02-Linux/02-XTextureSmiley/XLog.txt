@@ -1,2 +1,0 @@
-XWindow Log file CREATED successfully!
-XWindow Log file CLOSED successfully!
