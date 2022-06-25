@@ -123,7 +123,7 @@ int main(void)
     
     if(display == NULL)
     {
-        printf("ERROR: XOpenDisplay() failed\n");
+        fprintf("ERROR: XOpenDisplay() failed\n");
         uninitialize();
         exit(1);
     }
@@ -134,7 +134,7 @@ int main(void)
     
     visualInfo = glXChooseVisual(display, defaultScreen, frameBufferAttributes);                        //OpenGL change
     //now here we choose visualInfo instead of matching & visualInfo is now pointer so we'll have to use arrow to access its elements
-    
+    Meet
     if(visualInfo == NULL)
     {
         printf("ERROR: glXChooseVisual failed\n");
@@ -287,7 +287,6 @@ int main(void)
 			}
         }
         
-//confirm this position -----------------------------------------------------
         if(bActiveWindow == True)
         {
         	update();
@@ -474,16 +473,16 @@ void uninitialize(void)
     	glxContext = NULL;
     }
     
-    if(visualInfo)
-    {
-    	free(visualInfo);
-    	visualInfo = NULL;
-    }
-    
     if(fullscreen == True)
     {
         toggleFullscreen();
         fullscreen = False;
+    }
+    
+    if(visualInfo)
+    {
+    	free(visualInfo);
+    	visualInfo = NULL;
     }
     
     if(window)
