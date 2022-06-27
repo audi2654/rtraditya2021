@@ -94,6 +94,7 @@ int main(void)
 	
 	//STEP-4: get visualInfo using XMatchVisualInfo() & do error checking
 	status = XMatchVisualInfo(display, defaultScreen, defaultDepth, TrueColor, &visualInfo);		//4th Xlib API call
+	//matching or choosing visual info of preferred window from a internal window class list for this XClient App
 	//TrueColor, DirectColor, StaticColor are predefined window color class & is analogous to you choosing/matching the type in PFB(PixelFormatDescriptor in Win32) 
 	//from already created list in Win32 library but here from XServer's visuals list hence the name XMatchVisualInfo
 	
