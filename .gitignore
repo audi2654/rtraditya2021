@@ -5,4 +5,6 @@
 /Extras
 *.bat
 Log.txt
+/XLog.txt
 XLog.txt
+01-OpenGL/01-FFP/XLog.txt
