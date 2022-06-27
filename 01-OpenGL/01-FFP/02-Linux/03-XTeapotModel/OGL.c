@@ -125,7 +125,7 @@ int main(void)
     
     if(display == NULL)
     {
-        printf("ERROR: XOpenDisplay() failed\n");
+        fprintf(gpFile, "ERROR: XOpenDisplay() failed\n");
         uninitialize();
         exit(1);
     }
@@ -139,9 +139,13 @@ int main(void)
 
     if(visualInfo == NULL)
     {
-        printf("ERROR: glXChooseVisual failed\n");
+        fprintf(gpFile, "ERROR: glXChooseVisual failed\n");
         uninitialize();
         exit(1);
+    }
+    else
+    {
+        fprintf(gpFile, "SUCCESS: glXChooseVisual got it\n");
     }
     
     memset(&windowAttributes, 0, sizeof(XSetWindowAttributes));
@@ -174,7 +178,7 @@ int main(void)
                         
     if (!window)
     {
-        printf("ERROR: XCreateWindow() failed\n");
+        fprintf(gpFile, "ERROR: XCreateWindow() failed\n");
         uninitialize();
         exit(1);
     }
