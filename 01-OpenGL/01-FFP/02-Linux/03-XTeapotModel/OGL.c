@@ -1,6 +1,8 @@
 //Date: 11/06/2022
 //RTR2021 XWindows OpenGL Utah Teapot Texture by Model Loading
 
+//Press L/l for Lighting & T/t for Texture
+
 //cmd to use: gcc -o OGL OGL.c -lX11 -lGL -lGLU -lSOIL
 //-lX11 means file in /lib/x86_64-linux-gnu/libX11.so (shared object)
 //-lGL is libGL.so 
@@ -123,7 +125,7 @@ int main(void)
     
     if(display == NULL)
     {
-        fprintf("ERROR: XOpenDisplay() failed\n");
+        printf("ERROR: XOpenDisplay() failed\n");
         uninitialize();
         exit(1);
     }
@@ -134,7 +136,7 @@ int main(void)
     
     visualInfo = glXChooseVisual(display, defaultScreen, frameBufferAttributes);                        //OpenGL change
     //now here we choose visualInfo instead of matching & visualInfo is now pointer so we'll have to use arrow to access its elements
-    Meet
+
     if(visualInfo == NULL)
     {
         printf("ERROR: glXChooseVisual failed\n");
