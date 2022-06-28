@@ -132,6 +132,7 @@ int main(void)
 	colormap = windowAttributes.colormap;
 	
 	//STEP-7: initialize window styles using StyleMask which will have attributes created in windowAttributes above
+	//CW is "Create Window” or “Change Window"
 	styleMask = CWBorderPixel | CWBackPixel | CWColormap | CWEventMask;
 	
 	//STEP-8: create window using XCreateWindow() Xlib API
@@ -172,7 +173,8 @@ int main(void)
 	//we have to do this because close button & window system menu are not in control of Xlib but in control of Window Manager(WM/DE)
 	//because WM/DE give options to set close button on right or left top side of window, or wnd name in middle or left/right side
 	
-	//creating Atom
+	//creating Atom & setting/adding it in WindowManager's protocol so as it recognizes our XClient, 
+	//responds to System Menu Close & makes Close button work wherever its position is on GUI (left/right)
 	wm_delete_window_atom = XInternAtom(display, "WM_DELETE_WINDOW", True);		//10th Xlib API callWM here is Window Manager
 	//setting or adding Atom in WM's Protocol
 	XSetWMProtocols(display, window, &wm_delete_window_atom, 1);						//11th Xlib API call
@@ -188,8 +190,12 @@ int main(void)
 		
 	while(1)
 	{
-		XNextEvent(display, &event);															//13th Xlib API call
+		XNextEvent(display, &event);															//13th Xlib API call, XNextEvent() is analogous to GetMessage() in Win32
 		
+		//since here main() is the only function & no separate callback function, so no Translate & DispatchMessage
+		//& no going to WndProc to handle the event msgs, so we directly handle event msgs inside Msg Loop in main () as below 
+
+		//handling event messages
 		switch(event.type)
 		{
 		//MapNotify in Xlib is analogous to WM_CREATE in Win32, it always comes whether we mention it in 
