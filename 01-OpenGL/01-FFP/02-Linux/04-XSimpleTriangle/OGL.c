@@ -178,6 +178,9 @@ int main(int argc, char* argv[], char* envp[])
 	screenHeight = XHeightOfScreen(XScreenOfDisplay(display, defaultScreen));
 	XMoveWindow(display, window, (screenWidth / 2) - (WIN_WIDTH / 2), (screenHeight / 2) - (WIN_HEIGHT / 2));
 
+	//initializing the graphics properties
+	initialize();
+	
 	//message loop
 	while(bDone == False)
 	{
@@ -292,7 +295,7 @@ int initialize(void)
 
 	//here starts OpenGL code
 	//clear the screen using black color
-	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	//light related changes
 
@@ -319,7 +322,7 @@ void resize(int width, int height)
 	//code
 	if(height == 0)
 	{
-		height = 100;
+		height = 100;					//-------------------------------------TRY putting 5 or 40  height & width
 	}
 
 	if(width == 0)
@@ -344,7 +347,7 @@ void draw(void)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -7.0f);
+	glTranslatef(0.0f, 0.0f, -5.0f);
 
 	glBegin(GL_TRIANGLES);
 	glColor3f(1.0f, 0.0f, 0.0f);
