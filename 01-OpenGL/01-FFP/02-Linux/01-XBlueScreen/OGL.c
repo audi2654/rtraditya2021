@@ -219,7 +219,7 @@ int main(void)
 			}
         }
         
-//confirm this position -----------------------------------------------------
+        //checking if our window is in focus or not
         if(bActiveWindow == True)
         {
         	//update()
@@ -263,10 +263,9 @@ void toggleFullscreen(void)
 void initialize(void)
 {
 	//func decl.
-	void uninitialize(void);
-	
+
 	//code
-	glxContext = glXCreateContext(display, visualInfo, NULL, True);
+	glxContext = glXCreateContext(display, visualInfo, NULL, True);                 //create a new GLX rendering context
 	//3rd para is pointer to a already existing graphics context if you have multiple graphic cards & their multiple GCs 
 	//then since Xlib is network compliant you can share the contexts
 	//between each other or create a new one using it, here we don't have any so give NULL
@@ -274,7 +273,7 @@ void initialize(void)
 	//4th para here as True means you ask Xlib to give native graphics card supported hardware rendering
 	//False means asking for software rendering with VESA virtual drivers like gallium for intel, noah for nvidia
 	
-	glXMakeCurrent(display, window, glxContext);							//analogous to wglMakeCurrent() in win32
+	glXMakeCurrent(display, window, glxContext);							//analogous to wglMakeCurrent() in Win32
 	
 	//here starts OpenGL functionality
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
