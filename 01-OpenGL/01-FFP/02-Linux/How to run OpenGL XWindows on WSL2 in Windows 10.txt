@@ -1,0 +1,48 @@
+How to run OpenGL XWindows on WSL2 in Windows 10
+
+1. Install the latest WSL2 on Windows 10 with Ubuntu 20 or 22
+
+2. Install Desktop Environment & Mesa Library & Driver for Intel machines on WSL2
+   a) use cmd: sudo apt install ubuntu-desktop mesa-utils
+
+3. Install VcXsrv XServer on Windows for actually viewing the GUI XWindow on Windows
+   a) use exe installer: https://sourceforge.net/projects/vcxsrv/
+
+   b) Open VcXsrv XLaunch from Start Menu
+   	i. Select Display Settings: Multiple Windows
+	ii. Display Number: 0
+	Click Next
+	iii. Select how to start client: Start no client
+	Click Next
+	iv. Extra Settings - Check boxes for all, especially Disable access control
+	v. Finish
+
+   c)Verify VcXsrv is running in Notification Tray at Windows Taskbar
+
+4. Get the IPv4 Address of you machine (Use ipconfig or WiFi properties)
+
+4. Open WSL2 Instance
+   a) run cmd: export DISPLAY=IPv4 Address:0.0
+   b) glxgears to test th working of OpenGL
+
+
+NOTES
+1. In WSL2 if file at cmd: cat /etc/resolv.conf shows 'nameserver 192.168.X.X' i.e some different IP 
+	then everytime when you use OpenGL in WSL2 after running VcXsrv, always do step-4.a & 4.boxes
+
+   -You can avoid doing this everytime by cmd: export DISPLAY=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'):0.0
+   
+   -In WSL you may require to change .bashrc file to always doing it
+		In WSL edit ~/.bashrc & put
+			export DISPLAY=IPv4 Address:0.0:0
+			unset LIBGL_ALWAYS_INDIRECT or LIBGL_ALWAYS_INDIRECT=0 
+		     OR set LIBGL_ALWAYS_INDIRECT or LIBGL_ALWAYS_INDIRECT=1
+
+2. Optional - If 'export DISPLAY' doesn't work, add Firewall Rule for XServer
+	Control Panel > System and Security > Windows Defender Firewall > Advanced Settings > 
+	Inbound Rules > New Rule... > Program > %ProgramFiles%\VcXsrv\vcxsrv.exe > 
+	Allow the connection > checked Domain/Private/Public > Named and Confirmed Rule
+
+3. Optional - Set variable for Direct or Indirect Rendering, whichever works
+	-For Direct: export LIBGL_ALWAYS_INDIRECT=0	(supports OpenGL any version supported by drivers v4.x)
+	-For Indirect: export LIBGL_ALWAYS_INDIRECT=1	(supports only up to OpenGL v1.4)
