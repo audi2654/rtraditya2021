@@ -30,13 +30,15 @@ NOTES
 1. In WSL2 if file at cmd: cat /etc/resolv.conf shows 'nameserver 192.168.X.X' i.e some different IP 
 	then everytime when you use OpenGL in WSL2 after running VcXsrv, always do step-4.a & 4.boxes
 
-   -You can avoid doing this everytime by cmd: export DISPLAY=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'):0.0
-   
-   -In WSL you may require to change .bashrc file to always doing it
-		In WSL edit ~/.bashrc & put
-			export DISPLAY=IPv4 Address:0.0:0
+	-In WSL you may require to change .bashrc file to always avoid doing above
+		In WSL edit ~/.bashrc & put:
+			export DISPLAY=IPv4 Address:0.0
 			unset LIBGL_ALWAYS_INDIRECT or LIBGL_ALWAYS_INDIRECT=0 
 		     OR set LIBGL_ALWAYS_INDIRECT or LIBGL_ALWAYS_INDIRECT=1
+
+    -If 'cat /etc/resolv.conf' shows your correct IPv4 Address, you can avoid doing above everytime by 
+	cmd: export DISPLAY=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'):0.0
+	OR cmd: export DISPLAY="$(grep nameserver /etc/resolv.conf | sed 's/nameserver //'):0"
 
 2. Optional - If 'export DISPLAY' doesn't work, add Firewall Rule for XServer
 	Control Panel > System and Security > Windows Defender Firewall > Advanced Settings > 
