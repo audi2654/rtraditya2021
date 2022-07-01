@@ -90,7 +90,7 @@ int main(int argc, char* argv[], char* envp[])
 							GLX_GREEN_SIZE, 8,
 							GLX_BLUE_SIZE, 8,
 							GLX_ALPHA_SIZE, 8,
-							GLX_DEPTH_SIZE, 24,
+							/*GLX_DEPTH_SIZE, 24,*/
 							None	/*Xlib convention to end every array with a terminating  character here 0 also works*/
 						};
 
@@ -251,32 +251,6 @@ int main(int argc, char* argv[], char* envp[])
 							amp_fullscreen = False;
 						}
 						break;
-					
-					case 'L':
-					case 'l':
-						{
-							if(amp_gbCircleLineLoop == False)
-							{
-								amp_gbCircleLineLoop = True;
-								amp_gbCirclePoints = False;
-							}
-							else if(amp_gbCircleLineLoop == True)
-								amp_gbCircleLineLoop = False;
-						}
-						break;
-
-					case 'P':
-					case 'p':
-						{
-							if(amp_gbCirclePoints == False)
-							{
-								amp_gbCirclePoints = True;
-								amp_gbCircleLineLoop = False;
-							}
-							else if(amp_gbCirclePoints == True)
-								amp_gbCirclePoints = False;
-						}
-						break;
 
 					default:
 						break;
@@ -407,7 +381,6 @@ void amp_draw(void)
 	void amp_ParallelHorizontalLines();
 	void amp_ParallelVerticalLines();
 	void amp_Triangle();
-	void amp_Circle();
 	void amp_Rectangle();
 	void amp_CirclePoints();
 	void amp_CircleLineLoop();
@@ -416,13 +389,13 @@ void amp_draw(void)
 	//local var decl.
 
 	//code
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT /*| GL_DEPTH_BUFFER_BIT*/);
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 
 	glLineWidth(3.0f);
 
+	glLoadIdentity();
 	glTranslatef(0.0f, 0.0f, -4.f);
 	glScalef(1.1f, 1.f, 0.0f);
 	amp_Triangle();
@@ -539,7 +512,7 @@ void amp_ParallelHorizontalLines()
 	GLfloat i = 1.0f;
 
 	//code
-	for(i; i > 0.0f; i = i - (0.02))
+	for(i; i > 0.0f; i = i - (0.05))
 	{
 		glBegin(GL_LINES);
 		glColor3f(0.0f, 0.0f, 1.0f);
@@ -563,7 +536,7 @@ void amp_ParallelVerticalLines()
 	GLfloat i = 1.0f;
 
 	//code
-	for(i; i > 0.0f; i = i - (0.02))
+	for(i; i > 0.0f; i = i - (0.05))
 	{
 		glBegin(GL_LINES);
 		glColor3f(0.0f, 0.0f, 1.0f);
@@ -583,38 +556,17 @@ void amp_ParallelVerticalLines()
 
 void amp_Triangle()
 {
-	glLoadIdentity();
-	glTranslatef(0.0f, 0.26f, -10.2f);
 	glBegin(GL_LINE_LOOP);
-	glColor3f(1.0f, 1.0f, 0.0f);
-	glVertex3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 0.0f);
-	glVertex3f(1.0f, -1.0f, 0.0f);
-	glEnd();
-}
-
-void amp_Circle()
-{
-	//local var decl.
-	GLfloat incre = 1.0f;
-	GLfloat radius = 0.3f;
-	
-	//code
-	glBegin(GL_LINE_LOOP);
-	glColor3f(1.0f, 1.0f, 0.0f);
-	for(GLfloat i = 0; i < 360; i = i + incre)
-	{
-		GLfloat X_coordinate = radius * cos(i * M_PI / 180.0f);
-		GLfloat Y_coordinate = radius * sin(i * M_PI / 180.0f);
-		glVertex2f(X_coordinate, Y_coordinate);
-	}
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex3f(0.0f, gfTriangleSideLength, 0.0f);
+	glVertex3f(-gfTriangleSideLength, -gfTriangleSideLength, 0.0f);
+	glVertex3f(gfTriangleSideLength, -gfTriangleSideLength, 0.0f);
 	glEnd();
 }
 
 void amp_Rectangle()
 {
 	//code
-	glTranslatef(0.0f, 0.0f, -5.7f);
 	glBegin(GL_LINE_LOOP);
 	glColor3f(1.0f, 1.0f, 0.0f);
 	glVertex3f(-1.0f, 1.0f, 0.0f);
