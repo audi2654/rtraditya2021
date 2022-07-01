@@ -1,6 +1,5 @@
 //Date: 30/06/2022
-//RTR2021 OGL XStatic Deathly Hallows 
-//with display toggling for circle type with L & P keypress
+//RTR2021 OGL XStatic Deathly Hallows
 
 //cmd: gcc -o OGL OGL.c -lX11 -lGL -lGLU -lm
 
