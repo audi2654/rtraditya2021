@@ -445,7 +445,7 @@ void amp_draw(void)
 		glVertex3f(1.0f, -1.0f, 0.0f);
 		glEnd();
 	}
-	else if (giKeyPressed == 2)		//half smile ---------------------wrong texcoords
+	else if (giKeyPressed == 2)
 	{
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.5f, 0.5f);
