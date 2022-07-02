@@ -448,14 +448,13 @@ void amp_draw(void)
 	else if (giKeyPressed == 2)		//half smile ---------------------wrong texcoords
 	{
 		glBegin(GL_QUADS);
-		
 		glTexCoord2f(0.5f, 0.5f);
 		glVertex3f(1.0f, 1.0f, 0.0f);
-		glTexCoord2f(0.5, 0.0f);
-		glVertex3f(-1.0f, 1.0f, 0.0f);
 		glTexCoord2f(0.0f, 0.5f);
+		glVertex3f(-1.0f, 1.0f, 0.0f);
+		glTexCoord2f(0.0, 1.0f);
 		glVertex3f(-1.0f, -1.0f, 0.0f);
-		glTexCoord2f(0.5f, 0.0f);
+		glTexCoord2f(0.5f, 1.0f);
 		glVertex3f(1.0f, -1.0f, 0.0f);
 		glEnd();
 	}
