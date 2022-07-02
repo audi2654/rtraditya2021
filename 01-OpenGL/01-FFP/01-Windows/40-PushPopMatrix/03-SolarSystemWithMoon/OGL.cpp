@@ -488,6 +488,8 @@ void display(void)
 	//beautification - 4
 	glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
 
+	glPushMatrix();		//saves & pushes CTM on MVM stack before earth spins around itself : State-3
+
 	//rotation around itself i.e Spinning Rotation
 	glRotatef((GLfloat)day, 0.0f, 0.0f, 1.0f);
 
@@ -513,6 +515,8 @@ void display(void)
 	gluSphere(quadric, 0.2f, 20, 20);
 
 //MOON related code starts from here
+	glPopMatrix();		//restores & pops CTM on MVM stack of State-3 
+	//so that moon is drawn on that CTM where earth was before its spinning around itself
 
 	//rotation around earth i.e Revolution Rotation
 	glRotatef((GLfloat)moon_revolve, 0.0f, 0.0f, 1.0f);
