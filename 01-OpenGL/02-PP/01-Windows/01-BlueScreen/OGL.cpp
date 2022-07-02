@@ -1,4 +1,4 @@
-//Date: 25/06/2022 & 26/06/2022
+//Date: 25/06/2022
 //RTR2021 OGL First Programmable Pipeline Blue Screen & PP Template Application
 //with OGL info, supported GL Extensions & Graphics Card properties
 
@@ -47,9 +47,6 @@ BOOL gbActiveWindow = FALSE;
 
 //for file I/O
 FILE* gpFile = NULL;
-
-//PP related global vars
-GLuint shaderProgramObject;
 
 //entry point func
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -358,115 +355,6 @@ int initialize(void)
 	//prinf OpenGL information
 	printGLInfo();
 
-	//--------STEP-C---------
-	//vertex shader code
-	//step-C1
-	const GLchar* vertexShaderSourceCode =
-		"#version 460 core" \
-		"\n" \
-		"void main(void)" \
-		"{" \
-		"}";
-
-	GLuint vertexShaderObject = glCreateShader(GL_VERTEX_SHADER);	//step-C2
-
-	glShaderSource(vertexShaderObject, 1, (const GLchar**)&vertexShaderSourceCode, NULL);	//step-C3
-
-	glCompileShader(vertexShaderObject);	//step-C4	inline shader compiler
-
-	//step-C5
-	GLint status = 0;
-	GLint infoLogLength = 0;
-	char* log = NULL;
-
-	glGetShaderiv(vertexShaderObject, GL_COMPILE_STATUS, &status);
-	if (status == GL_FALSE)
-	{
-		glGetShaderiv(vertexShaderObject, GL_INFO_LOG_LENGTH, &infoLogLength);
-		if (infoLogLength > 0)
-		{
-			log = (char*)malloc(infoLogLength);
-			if (log != NULL)
-			{
-				GLsizei written = 0;
-				glGetShaderInfoLog(vertexShaderObject, infoLogLength, &written, log);
-				fprintf(gpFile, "\nVertex Shader Compilation Log: %s\n", log);
-				free(log);
-				uninitialize();
-			}
-		}
-	}
-
-	//fragment shader code
-	//step-C1
-	const GLchar* fragmentShaderSourceCode =
-		"#version 460 core" \
-		"\n" \
-		"void main(void)" \
-		"{" \
-		"}";
-	
-	GLuint fragmentShaderObject = glCreateShader(GL_FRAGMENT_SHADER);	//step-C2
-
-	glShaderSource(fragmentShaderObject, 1, (const GLchar**)&fragmentShaderSourceCode, NULL);	//step-C3
-
-	glCompileShader(fragmentShaderObject);	//step-C4	inline shader compiler
-
-	//step-C5
-	status = 0;
-	infoLogLength = 0;
-	log = NULL;
-
-	glGetShaderiv(fragmentShaderObject, GL_COMPILE_STATUS, &status);
-	if (status == GL_FALSE)
-	{
-		glGetShaderiv(fragmentShaderObject, GL_INFO_LOG_LENGTH, &infoLogLength);
-		if (infoLogLength > 0)
-		{
-			log = (char*)malloc(infoLogLength);
-			if (log != NULL)
-			{
-				GLsizei written = 0;
-				glGetShaderInfoLog(fragmentShaderObject, infoLogLength, &written, log);
-				fprintf(gpFile, "\nVertex Shader Compilation Log: %s\n", log);
-				free(log);
-				uninitialize();
-			}
-		}
-	}
-
-	//--------STEP-D---------
-	shaderProgramObject = glCreateProgram();	//step-D1
-
-	//step-D2
-	glAttachShader(shaderProgramObject, vertexShaderObject);
-	glAttachShader(shaderProgramObject, fragmentShaderObject);
-
-	glLinkProgram(shaderProgramObject);			//step-D3 inline shader linker
-
-	//step-D4
-	status = 0;
-	infoLogLength = 0;
-	log = NULL;
-
-	glGetProgramiv(shaderProgramObject, GL_LINK_STATUS, &status);
-	if (status == GL_FALSE)
-	{
-		glGetProgramiv(shaderProgramObject, GL_INFO_LOG_LENGTH, &infoLogLength);
-		if (infoLogLength > 0)
-		{
-			log = (char*)malloc(infoLogLength);
-			if (log != NULL)
-			{
-				GLsizei written = 0;
-				glGetProgramInfoLog(shaderProgramObject, infoLogLength, &written, log);
-				fprintf(gpFile, "\nVertex Shader Compilation Log: %s\n", log);
-				free(log);
-				uninitialize();
-			}
-		}
-	}
-
 	//here starts OpenGL code
 	//clear the screen using blue color
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);	//RGBA here we only tell which color to use when clearing screen, actual clearing happens in display()
@@ -502,14 +390,7 @@ void display(void)
 	//code
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//here actual clearing happens with color which was set in initialize(), framebuffer/colorbuffer in VRAM
 
-	//use shadeProgramObject
-	glUseProgram(shaderProgramObject);
-
 	//here there should be drawing code
-
-
-	//unuse the shaderProgramObject
-	glUseProgram(0);
 
 	SwapBuffers(ghdc);
 }
@@ -529,34 +410,6 @@ void uninitialize(void)
 	if (gbFullScreen)
 	{
 		ToggleFullScreen();		//window should not die in Fullscreen mode
-	}
-
-	//shader uninitialization
-	if (shaderProgramObject)
-	{
-		glUseProgram(shaderProgramObject);
-		
-		GLsizei numAttachedShaders = 0;
-		glGetProgramiv(shaderProgramObject, GL_ATTACHED_SHADERS, &numAttachedShaders);
-
-		GLuint* shaderObjects = NULL;
-		shaderObjects = (GLuint*)malloc(numAttachedShaders * sizeof(GLuint));
-
-		glGetAttachedShaders(shaderProgramObject, numAttachedShaders, &numAttachedShaders, shaderObjects);
-
-		for (GLsizei i = 0; i < numAttachedShaders; i++)
-		{
-			glDetachShader(shaderProgramObject, shaderObjects[i]);
-			glDeleteShader(shaderObjects[i]);	//deleting shader obj from OGL memory
-			shaderObjects[i] = 0;
-		}
-
-		free(shaderObjects);	//freeing malloc() memory
-		shaderObjects = NULL;
-
-		glUseProgram(0);
-		glDeleteProgram(shaderProgramObject);
-		shaderProgramObject = 0;
 	}
 
 	if (wglGetCurrentContext() == ghrc)
