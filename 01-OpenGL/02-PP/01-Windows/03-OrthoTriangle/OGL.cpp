@@ -294,7 +294,6 @@ void ToggleFullScreen(void)
 		{
 			mi.cbSize = sizeof(MONITORINFO);
 
-
 			if (GetWindowPlacement(ghwnd, &wp) && GetMonitorInfo(MonitorFromWindow(ghwnd, MONITORINFOF_PRIMARY), &mi))
 			{
 				SetWindowLong(ghwnd, GWL_STYLE, dwStyle & ~WS_OVERLAPPEDWINDOW);
@@ -309,7 +308,6 @@ void ToggleFullScreen(void)
 		SetWindowLong(ghwnd, GWL_STYLE, dwStyle | WS_OVERLAPPEDWINDOW);
 		SetWindowPlacement(ghwnd, &wp);
 		SetWindowPos(ghwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER | SWP_FRAMECHANGED);     //0, 0, 0, 0 because everything is given in wp
-
 
 		ShowCursor(TRUE);
 		gbFullScreen = FALSE;
@@ -497,12 +495,17 @@ int initialize(void)
 
 	//vertex vao & vbo related code
 	glGenVertexArrays(1, &vao);				//step-A4 (A3 is above)
-	glBindVertexArray(vao);					//step-A5
-	glGenBuffers(1, &vbo);					//step-A5a
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);		//step-A5b
-	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);		//step-A5c
-	glVertexAttribPointer(AMP_ATTRIBUTE_POSITION, 3, GL_FLOAT, GL_FALSE, 0, NULL);					//step-A5d
-	glEnableVertexAttribArray(AMP_ATTRIBUTE_POSITION);												//step-A5e
+	glBindVertexArray(vao);					//step-A5		
+	//we create vao to record below 5 lines of vbo in 1 single array object only once 
+	//to avoid writing same 3 lines (of glBindBuffer(), glBufferData(), glVertexAttribPointer()) 
+	//each time for position, color, normal, texture, etc & use all at once like a cassette 
+	//inside glBindVertexArray & unbind vao in display() below
+	
+	glGenBuffers(1, &vbo);					//step-A5a		here vbo returns with a memory mapped I/O address from GPU VRAM, i.e watching GPU memory(khidki) from CPU memory(khidki)
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);		//step-A5b		binding vbo to a target point of type of GL_ARRAY_BUFFER means, this vbo addr will hold array buffer data
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);		//step-A5c		putting triangleVertices array in vbo in VRAM; GL_STATIC_DRAW means to fill buffer data now or on runtime, for runtime use GL_DYNAMIC_DRAW
+	glVertexAttribPointer(AMP_ATTRIBUTE_POSITION, 3, GL_FLOAT, GL_FALSE, 0, NULL);					//step-A5d		this function tells the way & how to see the data stored in vbo
+	glEnableVertexAttribArray(AMP_ATTRIBUTE_POSITION);												//step-A5e		enabling the buffer array at position AMP_ATTRIBUTE_POSITION for further vertex processing
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);		//step-A5f		unbinding veretx array buffer
 
@@ -577,7 +580,7 @@ void display(void)
 
 	glUniformMatrix4fv(mvpMatrixUniform, 1, GL_FALSE, modelViewProjectionMatrix);
 
-	glBindVertexArray(vao);
+	glBindVertexArray(vao);		//binding here vao means running cassette & running all lines of vbo written in initialize() between bind & unbind of vao
 
 	//here there should be drawing code
 	glDrawArrays(GL_TRIANGLES, 0, 3);
