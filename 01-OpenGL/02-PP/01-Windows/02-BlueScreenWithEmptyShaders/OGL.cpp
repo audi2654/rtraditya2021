@@ -1,5 +1,5 @@
 //Date: 26/06/2022
-//RTR2021 OGL Blue Screen with Empty Shaders
+//RTR2021 OGL Blue Screen with Empty Passthrough Shaders
 //PP Template Application with OGL info, supported GL Extensions & Graphics Card properties
 
 //painting goes from retained mode to immediate/render mode graphics
@@ -278,7 +278,6 @@ void ToggleFullScreen(void)
 		{
 			mi.cbSize = sizeof(MONITORINFO);
 
-
 			if (GetWindowPlacement(ghwnd, &wp) && GetMonitorInfo(MonitorFromWindow(ghwnd, MONITORINFOF_PRIMARY), &mi))
 			{
 				SetWindowLong(ghwnd, GWL_STYLE, dwStyle & ~WS_OVERLAPPEDWINDOW);
@@ -293,7 +292,6 @@ void ToggleFullScreen(void)
 		SetWindowLong(ghwnd, GWL_STYLE, dwStyle | WS_OVERLAPPEDWINDOW);
 		SetWindowPlacement(ghwnd, &wp);
 		SetWindowPos(ghwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER | SWP_FRAMECHANGED);     //0, 0, 0, 0 because everything is given in wp
-
 
 		ShowCursor(TRUE);
 		gbFullScreen = FALSE;
@@ -375,6 +373,7 @@ int initialize(void)
 	glCompileShader(vertexShaderObject);	//step-C4	inline shader compiler
 
 	//step-C5
+	//error checking for vertex shader
 	GLint status = 0;
 	GLint infoLogLength = 0;
 	char* log = NULL;
@@ -413,6 +412,7 @@ int initialize(void)
 	glCompileShader(fragmentShaderObject);	//step-C4	inline shader compiler
 
 	//step-C5
+	//error checking for fragment shader
 	status = 0;
 	infoLogLength = 0;
 	log = NULL;
@@ -428,7 +428,7 @@ int initialize(void)
 			{
 				GLsizei written = 0;
 				glGetShaderInfoLog(fragmentShaderObject, infoLogLength, &written, log);
-				fprintf(gpFile, "\nVertex Shader Compilation Log: %s\n", log);
+				fprintf(gpFile, "\nFragment Shader Compilation Log: %s\n", log);
 				free(log);
 				uninitialize();
 			}
@@ -445,6 +445,7 @@ int initialize(void)
 	glLinkProgram(shaderProgramObject);			//step-D3 inline shader linker
 
 	//step-D4
+	//error checking for shader program
 	status = 0;
 	infoLogLength = 0;
 	log = NULL;
@@ -460,7 +461,7 @@ int initialize(void)
 			{
 				GLsizei written = 0;
 				glGetProgramInfoLog(shaderProgramObject, infoLogLength, &written, log);
-				fprintf(gpFile, "\nVertex Shader Compilation Log: %s\n", log);
+				fprintf(gpFile, "\nShader Program Compilation Log: %s\n", log);
 				free(log);
 				uninitialize();
 			}
