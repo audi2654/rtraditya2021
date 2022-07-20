@@ -381,6 +381,7 @@ int initialize(void)
 
 	glCompileShader(vertexShaderObject);	//inline shader compiler
 
+	//error checking for vertex shader
 	GLint status = 0;
 	GLint infoLogLength = 0;
 	char* log = NULL;
@@ -419,6 +420,7 @@ int initialize(void)
 
 	glCompileShader(fragmentShaderObject);	//inline shader compiler
 
+	//error checking for fragment shader
 	status = 0;
 	infoLogLength = 0;
 	log = NULL;
@@ -434,7 +436,7 @@ int initialize(void)
 			{
 				GLsizei written = 0;
 				glGetShaderInfoLog(fragmentShaderObject, infoLogLength, &written, log);
-				fprintf(gpFile, "\nVertex Shader Compilation Log: %s\n", log);
+				fprintf(gpFile, "\nFragment Shader Compilation Log: %s\n", log);
 				free(log);
 				uninitialize();
 			}
@@ -450,7 +452,8 @@ int initialize(void)
 	glBindAttribLocation(shaderProgramObject, AMP_ATTRIBUTE_POSITION, "a_position");			//viable place for andhar
 
 	glLinkProgram(shaderProgramObject);			//inline shader linker
-
+	
+	//error checking for shader program
 	status = 0;
 	infoLogLength = 0;
 	log = NULL;
@@ -466,7 +469,7 @@ int initialize(void)
 			{
 				GLsizei written = 0;
 				glGetProgramInfoLog(shaderProgramObject, infoLogLength, &written, log);
-				fprintf(gpFile, "\nVertex Shader Compilation Log: %s\n", log);
+				fprintf(gpFile, "\nShader Program Compilation Log: %s\n", log);
 				free(log);
 				uninitialize();
 			}
