@@ -275,7 +275,6 @@ void ToggleFullScreen(void)
 		{
 			mi.cbSize = sizeof(MONITORINFO);
 
-
 			if (GetWindowPlacement(ghwnd, &wp) && GetMonitorInfo(MonitorFromWindow(ghwnd, MONITORINFOF_PRIMARY), &mi))
 			{
 				SetWindowLong(ghwnd, GWL_STYLE, dwStyle & ~WS_OVERLAPPEDWINDOW);
@@ -290,7 +289,6 @@ void ToggleFullScreen(void)
 		SetWindowLong(ghwnd, GWL_STYLE, dwStyle | WS_OVERLAPPEDWINDOW);
 		SetWindowPlacement(ghwnd, &wp);
 		SetWindowPos(ghwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER | SWP_FRAMECHANGED);     //0, 0, 0, 0 because everything is given in wp
-
 
 		ShowCursor(TRUE);
 		gbFullScreen = FALSE;
