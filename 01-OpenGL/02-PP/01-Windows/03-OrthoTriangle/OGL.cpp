@@ -63,7 +63,7 @@ enum
 
 GLuint vao;									//vertex array object
 GLuint vbo;									//vertex buffer object
-GLuint mvpMatrixUniform;							//
+GLuint mvpMatrixUniform;					//uniform variable for MVP matrix
 
 mat4 orthographicProjectionMatrix;
 
@@ -456,6 +456,8 @@ int initialize(void)
 	glAttachShader(shaderProgramObject, vertexShaderObject);
 	glAttachShader(shaderProgramObject, fragmentShaderObject);
 
+	//static or initial data feed - pipeline mouth - Attributes type variables e.g in, out in GLSL - to bind or associate a user-defined attribute variable (here a_position) in the program object specified by program with a generic vertex attribute index (here AMP_ATTRIBUTE_POSITION)
+	//static attributes which are initially in large numbers like Postion, Color, Normals, Texcoords are to be bounded here in Prelinking step
 	//step-A1: prelinking & binding of shader program object with vertex attributes 
 	glBindAttribLocation(shaderProgramObject, AMP_ATTRIBUTE_POSITION, "a_position");			//viable place for andhar
 
@@ -484,6 +486,8 @@ int initialize(void)
 		}
 	}
 
+	//dynamic or runtime data feed - individual shader cabins - Uniform type variables e.g uniform in GLSL - to get the (non-zero) location of a specific uniform variable declared in shader (here u_mvpMatrix) within a program object & store it in a user defined variable (here mvpMatrixUniform)
+	//dynamic or per frame changeable or continuously updated or Animation/Transformation data i.e data variables for display() are to be of uniform type & there locations should be grabbed from shaderProgramObject after shader object linking step
 	//step-A2: post linking retrieving uniformed location from shaderProgramObject
 	mvpMatrixUniform = glGetUniformLocation(shaderProgramObject, "u_mvpMatrix");				//viable place for andhar			
 
@@ -579,7 +583,7 @@ void display(void)
 	mat4 modelViewMatrix = mat4::identity();
 	mat4 modelViewProjectionMatrix = mat4::identity();
 
-	modelViewProjectionMatrix = orthographicProjectionMatrix * modelViewMatrix;
+	modelViewProjectionMatrix = orthographicProjectionMatrix * modelViewMatrix;	//here order is important always put projection matric first, matrix multi is non-commutative
 
 	glUniformMatrix4fv(mvpMatrixUniform, 1, GL_FALSE, modelViewProjectionMatrix);
 
