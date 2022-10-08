@@ -1,5 +1,6 @@
 //Date: 24/07/2022
-//RTR2021 OGL PP Diffused Light on Pyramid
+//RTR2021 OGL PP Diffused Light on Rotating Pyramid
+//Use l, L to toggle switch for light
 
 //header files
 #include <windows.h>
