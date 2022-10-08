@@ -1,5 +1,6 @@
-//Date: 17/07/2022
-//RTR2021 OGL PP Colored Perspective Projection Blue Screen - Two3DShapes Rotation
+//Date: 24/07/2022
+////RTR2021 OGL PP Diffused Light on Rotating Cube
+//Use l, L to toggle switch for light
 
 //header files
 #include <windows.h>
@@ -62,7 +63,6 @@ GLuint vao_cube;
 GLuint vbo_cube_position;
 GLuint vbo_cube_normal;
 GLuint vbo_cube_color;
-
 
 GLfloat anglePyramid = 0.0f;
 GLfloat angleCube;
