@@ -670,13 +670,12 @@ void display(void)
 
 	//PYRAMID
 	//transformations related code
-	//declaring TRS & MVP identity matrices
+	//declaring TRS & MVP identity matrices as per requirement
 	mat4 translationMatrix = mat4::identity();
 	mat4 rotationMatrix = mat4::identity();
 	
 	mat4 modelMatrix = mat4::identity();
 	mat4 viewMatrix = mat4::identity();
-	mat4 modelViewProjectionMatrix = mat4::identity();	
 
 	//initializing matrices with values or doing calculation
 	translationMatrix = vmath::translate(0.0f, 0.0f, -6.0f);
