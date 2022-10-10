@@ -87,8 +87,8 @@ GLuint lightingEnabledUniform;			//used in Shader
 BOOL bLight = FALSE; 					//used in WNDPROC to handle case for 'L'
 
 //vars for values to use in diffused light calculation
-GLfloat gfMaterialDiffuse[] = {0.5f, 0.5f, 0.5f, 1.0f};			//for u_kd (light shininess/brightness) in shader
-GLfloat gfLightDiffuse[] = {1.0f, 0.0f, 1.0f, 1.0f};			//for u_ld (light color) in shader
+GLfloat gfMaterialDiffuse[] = {1.0f, 0.0f, 0.0f, 1.0f};			//for u_kd (light shininess/brightness) in shader
+GLfloat gfLightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};			//for u_ld (light color) in shader
 GLfloat gfLightPosition[] = {0.0f, 0.0f, 2.0f, 1.0f};
 
 mat4 perspectiveProjectionMatrix;
@@ -436,7 +436,7 @@ int initialize(void)
 				"mat3 normalMatrix = mat3(transpose(inverse(u_viewMatrix * u_modelMatrix)));" \
 				"vec3 transformedNormals = normalize(normalMatrix * a_normal);" \
 				"vec3 lightDirection = normalize(vec3(u_lightPosition - eyeCoordinates));" \
-				"diffuse_light_color = u_ld * vec3(a_color) * u_kd * max(dot(lightDirection, transformedNormals), 0.0);" \
+				"diffuse_light_color = u_ld * u_kd * max(dot(lightDirection, transformedNormals), 0.0);" \
 			"}" \
 			"gl_Position = u_projectionMatrix * u_viewMatrix * u_modelMatrix * a_position;" \
 			"a_color_out = a_color;" \
