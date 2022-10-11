@@ -113,7 +113,7 @@ GLfloat gfLightPosition[] = {100.0f, 100.0f, 100.0f, 1.0f};			//change light pos
 GLfloat gfMaterialAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
 GLfloat gfMaterialDiffuse[] = {0.5f, 0.2f, 0.7f, 1.0f};
 GLfloat gfMaterialSpecular[] = {0.7f, 0.7f, 0.7f, 1.0f};
-GLfloat gfMaterialShininess = 50.0f;
+GLfloat gfMaterialShininess = 128.0f;
 
 mat4 perspectiveProjectionMatrix;
 
