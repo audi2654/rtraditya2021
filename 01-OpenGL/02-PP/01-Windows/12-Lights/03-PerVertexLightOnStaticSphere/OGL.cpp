@@ -94,14 +94,26 @@ GLuint lightingEnabledUniform;			//used in Shader
 BOOL bLight = FALSE; 					//used in WNDPROC to handle case for 'L'
 
 //vars for values to use in light calculation (values taken from Gouraud Shading on Sphere FFP program)
-GLfloat gfLightAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
+//black & white
+// GLfloat gfLightAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
+// GLfloat gfLightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+// GLfloat gfLightSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+// GLfloat gfLightPosition[] = {100.0f, 100.0f, 100.0f, 1.0f};
+
+// GLfloat gfMaterialAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
+// GLfloat gfMaterialDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+// GLfloat gfMaterialSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+// GLfloat gfMaterialShininess = 50.0f;
+
+//albedo
+GLfloat gfLightAmbient[] = {0.1f, 0.1f, 0.1f, 1.0f};
 GLfloat gfLightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat gfLightSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
-GLfloat gfLightPosition[] = {100.0f, 100.0f, 100.0f, 1.0f};
+GLfloat gfLightPosition[] = {100.0f, 100.0f, 100.0f, 1.0f};			//change light position
 
 GLfloat gfMaterialAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
-GLfloat gfMaterialDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
-GLfloat gfMaterialSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+GLfloat gfMaterialDiffuse[] = {0.5f, 0.2f, 0.7f, 1.0f};
+GLfloat gfMaterialSpecular[] = {0.7f, 0.7f, 0.7f, 1.0f};
 GLfloat gfMaterialShininess = 50.0f;
 
 mat4 perspectiveProjectionMatrix;
@@ -163,7 +175,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
 	hwnd = CreateWindowEx(WS_EX_APPWINDOW,
 		szAppName,
-		TEXT("AMP OGL PP Sphere with Shaders"),
+		TEXT("AMP RTR PP Window - Per Vertex Phong Lighting"),
 		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
 		xWindowPosition,
 		yWindowPosition,
@@ -463,7 +475,7 @@ int initialize(void)
 			"}" \
 			"else" \
 			"{" \
-				"phong_ads_light = vec3(1.0f, 1.0, 1.0);" \
+				"phong_ads_light = vec3(0.5f, 1.0, 1.0);" \
 			"}" \
 			"gl_Position = u_projectionMatrix * u_viewMatrix * u_modelMatrix * a_position;" \
 			"a_color_out = a_color;" \
@@ -607,7 +619,7 @@ int initialize(void)
 		laUniform = glGetUniformLocation(shaderProgramObject, "u_la");						//light ambient
 		ldUniform = glGetUniformLocation(shaderProgramObject, "u_ld");						//light diffuse
 		lsUniform = glGetUniformLocation(shaderProgramObject, "u_ls");						//light specular
-		lightPositionUniform = glGetUniformLocation(shaderProgramObject, "u_lightPostion");
+		lightPositionUniform = glGetUniformLocation(shaderProgramObject, "u_lightPosition");
 
 		//retrieving uniformed locations of material ADS uniform vars
 		kaUniform = glGetUniformLocation(shaderProgramObject, "u_ka");						//material ambient
@@ -729,6 +741,10 @@ void display(void)
 		glUniform3fv(kdUniform, 1, gfMaterialDiffuse);
 		glUniform3fv(ksUniform, 1, gfMaterialSpecular);
 		glUniform1f(materialShininessUniform, gfMaterialShininess);
+	}
+	else
+	{
+		glUniform1i(lightingEnabledUniform, 0);
 	}
 
 	glBindVertexArray(vao_sphere);		//binding here vao means running cassette & running all lines of vbo written in initialize() between bind & unbind of vao
