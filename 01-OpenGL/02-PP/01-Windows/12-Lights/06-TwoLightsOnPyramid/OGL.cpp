@@ -769,6 +769,20 @@ void display(void)
 	glUniformMatrix4fv(viewMatrixUniform, 1, GL_FALSE, viewMatrix);
 	glUniformMatrix4fv(projectionMatrixUniform, 1, GL_FALSE, perspectiveProjectionMatrix);
 
+	for(int i = 0; i < 2; i++)
+	{
+		if(bLight == 1)
+		{
+			glUniform1i(lightingEnabledUniform, 1);
+
+			//now passing/pushing arrays/vectors with updated/calculated values of LIGHT to shader using uniform type variables
+			glUniform3fv(laUniform[i], 1, gsLights[i].lightAmbient);
+			glUniform3fv(ldUniform[i], 1, gsLights[i].lightDiffuse);
+			glUniform3fv(lsUniform[i], 1, gsLights[i].lightSpecular);
+			glUniform1i(lightPositionUniform[i], gsLights[i].lightPosition);
+		}
+	}
+
 	glBindVertexArray(vao_pyramid);
 	glDrawArrays(GL_TRIANGLES, 0, 12); 			//1 triangle has 3 vertices, now pyramid has 4 sides each with 3 side, so 12
 	glBindVertexArray(0);
@@ -801,6 +815,12 @@ void uninitialize(void)
 	}
 
 	//deletion/uninitialization of vbo
+	if (vbo_pyramid_normal)
+	{
+		glDeleteBuffers(1, &vbo_pyramid_normal);
+		vbo_pyramid_normal = 0;
+	}
+
 	if (vbo_pyramid_position)
 	{
 		glDeleteBuffers(1, &vbo_pyramid_position);
