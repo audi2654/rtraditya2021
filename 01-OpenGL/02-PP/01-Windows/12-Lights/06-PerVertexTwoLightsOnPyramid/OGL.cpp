@@ -1,5 +1,5 @@
 //Date: 31/07/2022
-//RTR2021 OGL PP Two Wing Stand Lights on Spinning Pyramid with Per Vertex Lighting
+//RTR2021 OGL PP Two Wing Stand Lights on Spinning Pyramid with PER VERTEX Lighting
 //Press L, l to see effects
 
 //header files
