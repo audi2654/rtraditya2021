@@ -162,7 +162,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
 	hwnd = CreateWindowEx(WS_EX_APPWINDOW,
 		szAppName,
-		TEXT("AMP RTR PP Window"),
+		TEXT("AMP OGL PP Window"),
 		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
 		xWindowPosition,
 		yWindowPosition,
@@ -769,18 +769,27 @@ void display(void)
 	glUniformMatrix4fv(viewMatrixUniform, 1, GL_FALSE, viewMatrix);
 	glUniformMatrix4fv(projectionMatrixUniform, 1, GL_FALSE, perspectiveProjectionMatrix);
 
-	for(int i = 0; i < 2; i++)
+	if(bLight == TRUE)
 	{
-		if(bLight == 1)
-		{
-			glUniform1i(lightingEnabledUniform, 1);
+		glUniform1i(lightingEnabledUniform, 1);
 
+		for(int i = 0; i < 2; i++)
+		{
 			//now passing/pushing arrays/vectors with updated/calculated values of LIGHT to shader using uniform type variables
 			glUniform3fv(laUniform[i], 1, gsLights[i].lightAmbient);
 			glUniform3fv(ldUniform[i], 1, gsLights[i].lightDiffuse);
 			glUniform3fv(lsUniform[i], 1, gsLights[i].lightSpecular);
-			glUniform1i(lightPositionUniform[i], gsLights[i].lightPosition);
+			glUniform4fv(lightPositionUniform[i], 1, gsLights[i].lightPosition);
 		}
+
+		glUniform3fv(kaUniform, 1, gfMaterialAmbient);
+		glUniform3fv(kdUniform, 1, gfMaterialDiffuse);
+		glUniform3fv(ksUniform, 1, gfMaterialSpecular);
+		glUniform1f(materialShininessUniform, gfMaterialShininess);
+	}
+	else
+	{
+		glUniform1i(lightingEnabledUniform, 0);
 	}
 
 	glBindVertexArray(vao_pyramid);
