@@ -1,5 +1,5 @@
 //Date: 31/07/2022
-//RTR2021 OGL PP Per Veretex Per Fragment Lighting on Static Sphere Toggled
+//RTR2021 OGL PP Per Vertex Per Fragment Lighting on Static Sphere Toggled
 //using Phong ADS Lighting Model (ADS - Ambient Diffuse Specular)
 //Use l, L to toggle switch for light, F for Fragment & V for Vertex, Q for fullscreen
 
@@ -91,8 +91,6 @@ GLuint materialShininessUniform;		//material shinines
 
 //var for toggling between on/off of light
 GLuint lightingEnabledUniform;			//used in Shader
-GLuint vertexLightingEnabledUniform;
-GLuint fragmentLightingEnabledUniform;
 BOOL bLight = FALSE; 					//used in WNDPROC to handle case for 'L'
 char chosenShader = 'v';
 
@@ -178,7 +176,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
 	hwnd = CreateWindowEx(WS_EX_APPWINDOW,
 		szAppName,
-		TEXT("AMP RTR PP Window - Per Vertex Per Fragment Phong Lighting Toggled - Use L,F,V keypress"),
+		TEXT("AMP OGL PP - Per Vertex Per Fragment Phong Lighting Toggled - Use L,F,V keypress"),
 		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
 		xWindowPosition,
 		yWindowPosition,
@@ -460,7 +458,6 @@ int initialize(void)
 		"\n" \
 		"in vec4 a_position;" \
 		"in vec3 a_normal;" \
-		"in vec4 a_color;" \
 		"uniform mat4 u_modelMatrix;" \
 		"uniform mat4 u_viewMatrix;" \
 		"uniform mat4 u_projectionMatrix;" \
@@ -474,7 +471,6 @@ int initialize(void)
 		"uniform float u_materialShininess;" \
 		"uniform int u_lightingEnabled;" \
 		"out vec3 phong_ads_light;" \
-		"out vec4 a_color_out;" \
 		"void main(void)" \
 		"{" \
 			"if(u_lightingEnabled == 1)" \
@@ -495,7 +491,6 @@ int initialize(void)
 				"phong_ads_light = vec3(1.0f, 1.0, 1.0);" \
 			"}" \
 			"gl_Position = u_projectionMatrix * u_viewMatrix * u_modelMatrix * a_position;" \
-			"a_color_out = a_color;" \
 		"}";
 
 	//instead of glLightfv() & glMaterialfv() in FFP, we calculate whole light & material ADS components in PP through shaders using maths
@@ -553,7 +548,6 @@ int initialize(void)
 	const GLchar* fragmentShaderSourceCode_pv =
 		"#version 460 core" \
 		"\n" \
-		"in vec4 a_color_out;" \
 		"in vec3 phong_ads_light;" \
 		"out vec4 FragColor;" \
 		"void main(void)" \
