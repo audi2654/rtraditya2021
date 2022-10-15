@@ -1,5 +1,5 @@
 //Date: 31/07/2022
-//RTR2021 OGL PP Two Wing Stand Lights on Spinning Pyramid with PER VERTEX Lighting
+//RTR2021 OGL PP Two Wing Stand Lights on Rotating Pyramid with PER VERTEX Lighting
 //Press L, l to see effects
 
 //header files
@@ -162,7 +162,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
 	hwnd = CreateWindowEx(WS_EX_APPWINDOW,
 		szAppName,
-		TEXT("AMP OGL PP Window"),
+		TEXT("AMP OGL PP - Per Vertex Two Wing Stand Lights on Rotating Pyramid"),
 		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
 		xWindowPosition,
 		yWindowPosition,
@@ -629,6 +629,9 @@ int initialize(void)
 
 	//here starts OpenGL code
 	//declaration of vertex data arrays
+	//ORDER of position, texcoord & normals for faces of shapes is important
+	//i.e if in 1st array first 3 values are for front face then all 3 arrays should have first 3 values for front face
+
 	const GLfloat pyramidPosition[] =
 	{
 		// front
