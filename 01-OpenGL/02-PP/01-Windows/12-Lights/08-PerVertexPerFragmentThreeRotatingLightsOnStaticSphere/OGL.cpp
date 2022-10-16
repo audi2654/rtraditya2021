@@ -80,11 +80,11 @@ GLuint modelMatrixUniform;								//splitting single mvpMatrixUniform in 3 unifo
 GLuint viewMatrixUniform;
 GLuint projectionMatrixUniform;
 
-//user defined uniform vars to do light calculations in shaders, array for 2 lights
+//user defined uniform vars to do light calculations in shaders, array for lights
 GLuint laUniform[3];						//light ambient
 GLuint ldUniform[3];						//light diffuse
 GLuint lsUniform[3];						//light specular
-GLuint lightPositionUniform[2];				//light position
+GLuint lightPositionUniform[3];				//light position
 
 GLuint kaUniform;							//material ambient
 GLuint kdUniform;							//material diffuse
@@ -98,7 +98,7 @@ char chosenShader = 'v';
 
 //vars for values to use in light calculation
 //using struct to declare 4 components/values of a light
-//& declaring array of struct for 2 lights with arrays/vectors of 4 values each to store ADSP 4 components
+//& declaring array of struct for lights with arrays/vectors of 4 values each to store ADSP 4 components
 struct Light
 {
 	vmath::vec4 lightAmbient;
