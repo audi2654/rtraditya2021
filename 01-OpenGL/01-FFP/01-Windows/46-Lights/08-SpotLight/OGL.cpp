@@ -1,5 +1,5 @@
-//Date: 12/05/2022
-//RTR2021 OGL Diffused Light Shading on Sphere
+//Date: 22/09/2022
+//RTR2021 OGL Spotlight on 3 Static Sphere
 //Press L, l to see effects
 
 //header files
@@ -47,8 +47,8 @@ GLUquadric *quadric = NULL;		//bowl to draw spheres into
 //for gouraud shading light
 GLfloat gfLightAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
 GLfloat gfLightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
-GLfloat gfLightPosition[] = {1.0f, 1.0f, 1.0f, 1.0f};
-GLfloat spotLightDirection[] = {0.0f, 0.0f, -1.0};
+GLfloat gfLightPosition[] = {1.0f, 1.0f, 1.0f, 0.0f};
+GLfloat spotLightDirection[] = {0.0f, 1.0f, -1.0};
 GLfloat spotLightExponent = 10.f;
 GLfloat spotLightCutoff = 30.0f;
 
@@ -374,7 +374,7 @@ int initialize(void)
 	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, spotLightExponent);
 	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, spotLightCutoff);
 	
-	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
 
 	//depth 3D related changes
 	glClearDepth(1.0f);
@@ -424,7 +424,7 @@ void display(void)
 	//changing only eye coordinates to get better view
 	//gluLookAt(0.0f, 0.0f, 4.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-	glTranslatef(0.0f, 0.0f, -4.0f);
+	glTranslatef(0.0f, 1.0f, -8.0f);
 
 	//beautification
 	//glColor3f(1.0f, 1.0f, 0.0f);
@@ -436,6 +436,14 @@ void display(void)
 	//drawing the sphere
 	gluSphere(quadric, 1.0f, 50, 50);		//parameters - bowl to draw in, radius, no of vertical slices, no of horizontal stacks
 	//varying the number of slices & stacks of a quadric will have effect on its light effect too
+
+	glLoadIdentity();
+	glTranslatef(0.9f, -0.5f, -8.0f);
+	gluSphere(quadric, 1.0f, 50, 50);
+
+	glLoadIdentity();
+	glTranslatef(-0.9f, -0.5f, -8.0f);
+	gluSphere(quadric, 1.0f, 50, 50);
 
 	SwapBuffers(ghdc);
 }
