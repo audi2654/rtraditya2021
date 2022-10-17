@@ -458,15 +458,26 @@ int initialize(void)
 	const GLchar* tessellationEvaluationShaderSourceCode =
 		"#version 460 core" \
 		"\n" \
-		"layout(vertices = 4)out;" \
-		"uniform int u_numberOfSegments;" \
-		"uniform int u_numberOfStrips;" \
+		"layout(isolines)in;" \
+		"uniform mat4 u_mvpMatrix;" \
 		"void main(void)" \
 		"{" \
-			"gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;" \
-			"gl_TessLevelOuter[0] = float(u_numberOfStrips);" \
-			"gl_TessLevelOuter[1] = float(u_numberOfSegments);" \
+			"vec3 p0 = gl_in[0].gl_Position.xyz;" \
+			"vec3 p1 = gl_in[1].gl_Position.xyz;" \
+			"vec3 p2 = gl_in[2].gl_Position.xyz;" \
+			"vec3 p3 = gl_in[3].gl_Position.xyz;" \
+			"float u = gl_TessCoord.x;" \
+			"vec3 p = p0 * (1-u) * (1-u) * (1-u) +" \
+					"p1 * (3*u) * (1-u) * (1-u) +" \
+					"p2 * (3*u*u) * (1-u)" \
+					"p3 * (u*u*u);" \
+			"gl_Position = u_mvpMatrix * vec4(p, 1.0);" \
 		"}";
+
+	//gl_TessCoord value in OpenGL is float, but in Vulkan it is double
+	//gl_Position.xyz doing swizzling here to get xyz coordinates of line/curve points
+	//using above bezier curve equation p you can extrude objects from control points p0-p3
+	//just like in blender, maya or any other graphics software
 
 	GLuint tessellationEvaluationShaderObject = glCreateShader(GL_TESS_EVALUATION_SHADER);
 
@@ -501,10 +512,11 @@ int initialize(void)
 	const GLchar* fragmentShaderSourceCode =
 		"#version 460 core" \
 		"\n" \
+		"uniform vec4 u_lineColor;" \
 		"out vec4 FragColor;" \
 		"void main(void)" \
 		"{" \
-			"FragColor = vec4(1.0, 1.0, 1.0, 1.0);" \
+			"FragColor = u_lineColor;" \
 		"}";
 	
 	GLuint fragmentShaderObject = glCreateShader(GL_FRAGMENT_SHADER);
