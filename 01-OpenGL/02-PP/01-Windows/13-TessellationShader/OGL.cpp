@@ -124,7 +124,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
 	hwnd = CreateWindowEx(WS_EX_APPWINDOW,
 		szAppName,
-		TEXT("AMP OGL PP Blue Screen Perspective Triangle with Shaders"),
+		TEXT("AMP OGL PP - Bezier Curve with Tessellation Shader"),
 		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
 		xWindowPosition,
 		yWindowPosition,
@@ -454,6 +454,10 @@ int initialize(void)
 		}
 	}
 
+	//here in between control & evaluation, Tessellation Primitive Generator exists,
+	//it is an actual hardware unit in Video RAM, actual processor,
+	
+
 	//tessellation evaluation shader code
 	const GLchar* tessellationEvaluationShaderSourceCode =
 		"#version 460 core" \
@@ -585,17 +589,21 @@ int initialize(void)
 
 	//step-A2: post linking retrieving uniformed location from shaderProgramObject
 	mvpMatrixUniform = glGetUniformLocation(shaderProgramObject, "u_mvpMatrix");				//viable place for andhar			
+	numberOfSegmentsUniform = glGetUniformLocation(shaderProgramObject, "u_numberOfSegments");
+	numberOfStripsUniform = glGetUniformLocation(shaderProgramObject, "u_numberOfStrips");
+	lineColorUniform = glGetUniformLocation(shaderProgramObject, "u_lineColor");
 
 	//here starts OpenGL code
 	//declaration of vertex data arrays
 	//ORDER of position, texcoord & normals for faces of shapes is important
 	//i.e if in 1st array first 3 values are for front face then all 3 arrays should have first 3 values for front face
 
-	const GLfloat triangleVertices[] =
+	const GLfloat vertices[] =
 	{
-		0.0f, 1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f
+		1.0f, 1.0f,
+		-0.5f, 1.0f,
+		-1.0f, -1.0f,
+		0.5f, -1.0f
 	};
 
 	//vao for triangle
@@ -605,8 +613,8 @@ int initialize(void)
 	//vbo for triangle position vertices
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);		
-	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(AMP_ATTRIBUTE_POSITION, 3, GL_FLOAT, GL_FALSE, 0, NULL);					
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(AMP_ATTRIBUTE_POSITION, 2, GL_FLOAT, GL_FALSE, 0, NULL);					
 	glEnableVertexAttribArray(AMP_ATTRIBUTE_POSITION);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);		//unbinding vbo for triangle position vertices
 
@@ -622,6 +630,8 @@ int initialize(void)
 	//above 3 lines are must, below 2 lines are for FFP & do not work in PP because they are deprecated, although there is no error given for them
 	//glShadeModel(GL_SMOOTH);
 	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	uiNumberOfSegments = 1;		//we want atleat 1 line & our line have atleast 1 curve/geometry hence
 
 	perspectiveProjectionMatrix = mat4::identity();
 
@@ -659,16 +669,23 @@ void display(void)
 	mat4 modelViewMatrix = mat4::identity();
 	mat4 modelViewProjectionMatrix = mat4::identity();
 
-	translationMatrix = vmath::translate(0.0f, 0.0f, -4.0f);	//glTranslatef() is replaced by this line
+	translationMatrix = vmath::translate(0.0f, 0.0f, -4.0f);						//glTranslatef() is replaced by this line
 	modelViewMatrix = translationMatrix;
 	modelViewProjectionMatrix = perspectiveProjectionMatrix * modelViewMatrix;
 
 	glUniformMatrix4fv(mvpMatrixUniform, 1, GL_FALSE, modelViewProjectionMatrix);
+	glUniform1i(numberOfSegmentsUniform, uiNumberOfSegments);
+	TCHAR str[255];
+	wsprintf(str, TEXT("AMP OGL PP - Bezier Curve with Tessellation Shader | Number of Segments: %d"), uiNumberOfSegments);
+	SetWindowText(ghwnd, str);
+	glUniform1i(numberOfStripsUniform, 1);											//number of strips means 1 line
+	glUniform4fv(lineColorUniform, 1, vmath::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 
 	glBindVertexArray(vao);		//binding here vao means running cassette & running all lines of vbo written in initialize() between bind & unbind of vao
 
 	//here there should be drawing code
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glPatchParameteri(GL_PATCH_VERTICES, 4);
+	glDrawArrays(GL_PATCHES, 0, 4);
 
 	glBindVertexArray(0);
 
