@@ -45,12 +45,12 @@ FILE* gpFile = NULL;
 GLUquadric *quadric = NULL;		//bowl to draw spheres into
 
 //for gouraud shading light
-GLfloat gfLightAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
+GLfloat gfLightAmbient[] = {0.5f, 0.5f, 0.5f, 1.0f};
 GLfloat gfLightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
-GLfloat gfLightPosition[] = {1.0f, 1.0f, 1.0f, 0.0f};
-GLfloat spotLightDirection[] = {0.0f, 1.0f, -1.0};
-GLfloat spotLightExponent = 10.f;
-GLfloat spotLightCutoff = 30.0f;
+GLfloat gfLightPosition[] = {0.0f, 0.0f, 2.0f, 1.0f};
+GLfloat spotLightDirection[] = {0.0f, 0.0f, -1.0};
+GLfloat spotLightExponent = 100.0f;
+GLfloat spotLightCutoff = 20.0f;
 
 BOOL gbLight = FALSE;
 
@@ -111,7 +111,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
 	hwnd = CreateWindowEx(WS_EX_APPWINDOW,
 		szAppName,
-		TEXT("AMP OpenGL"),
+		TEXT("AMP OpenGL - Spotlight : Press L to see effect"),
 		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
 		xWindowPosition,
 		yWindowPosition,
@@ -370,11 +370,12 @@ int initialize(void)
 	glLightfv(GL_LIGHT0, GL_AMBIENT, gfLightAmbient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, gfLightDiffuse);
 	glLightfv(GL_LIGHT0, GL_POSITION, gfLightPosition);
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spotLightDirection);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, spotLightExponent);
-	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, spotLightCutoff);
+	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spotLightDirection);
+	glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, spotLightExponent);
+	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, spotLightCutoff);
 	
-	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHT1);
 
 	//depth 3D related changes
 	glClearDepth(1.0f);
