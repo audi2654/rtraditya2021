@@ -1,0 +1,25 @@
+﻿<!--Date: 12/11/2022-->
+<!--RTR2021 WebGL First Browser Canvas Program-->
+
+<!DOCTYPE html>
+<!--Magic Number or Signature of document i.e html-->
+<!--all tags here are a class in C++ internally-->
+
+<html lang="en">
+    <!--head-->
+    <head>
+        <meta charset="utf-8" />
+        <title>AMP My WebGL Canvas</title>
+    </head>
+
+    <!--body-->
+    <body onload="main()"> <!--you are telling browser when body of this page loads, my body is in main() function i'm using code behind so call that func, you can name any function here-->
+        <!--canvas (window)-->
+        <canvas id="AMP" width="800" height="600">This browser does not support HTML5 canvas element</canvas> 
+        <!--canvas is field variable here--> <!--id="AMP" is here similar to szClassName in Win32 wndclassex struct-->
+        <!--canvas is internally your class in window class & creates window, if browser runs in Windows, internally CreateWindow() API is used & if Linux XCreateWindow()-->
+    
+        <!--script-->
+        <script src="Canvas.js"></script>
+    </body>
+</html>
