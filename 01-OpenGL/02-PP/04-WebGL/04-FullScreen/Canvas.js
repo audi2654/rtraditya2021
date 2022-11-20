@@ -4,7 +4,6 @@
 //JavaScript source code
 //global variables
 var canvas = null;
-var context = null;
 var bFullScreen = false;
 
 //function definitions
@@ -34,20 +33,8 @@ function main() {
     context.fillStyle = "black";          //color can be written in hexadecimals too "#000000"
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    drawText("HelloWorld!!!");
-
-    //step-9: fullscreen
-
-    //step-10: adding keyboard & mouse event listener (event handlers or msg handler or event deligate)
-    window.addEventListener("keydown", keyDown, false);     //"keydown" here is inbuilt keyword in js for browser's wndproc
-    window.addEventListener("click", mouseDown, false);     //"click" here is inbuilt keyword in js for browser's wndproc
-    //third parameter is capture parameter & is for event bubbling concept
-}
-
-function drawText(text) {
-    //code
     //step-4: declare the string
-    var str = text;
+    var str = "HelloWorld!!!";
 
     //step-5: decide the font
     context.font = "48px sans-serif";
@@ -61,6 +48,11 @@ function drawText(text) {
 
     //step-8: display the text
     context.fillText(str, canvas.width / 2, canvas.height / 2);
+
+    //step-9: adding keyboard & mouse event listener (event handlers or msg handler or event deligate)
+    window.addEventListener("keydown", keyDown, false);     //"keydown" here is inbuilt keyword in js for browser's wndproc
+    window.addEventListener("click", mouseDown, false);     //"click" here is inbuilt keyword in js for browser's wndproc
+    //third parameter is capture parameter & is for event bubbling concept
 }
 
 function toggleFullscreen() {
@@ -114,7 +106,6 @@ function keyDown(event) {
     switch (event.keyCode) {
         case 70:
             toggleFullscreen();
-            //drawText("HelloWorld!!!");        //for repaint because it was not previous default behaviour
             break;
     }
 }
