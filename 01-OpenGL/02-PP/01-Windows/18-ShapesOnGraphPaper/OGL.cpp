@@ -958,7 +958,7 @@ void amp_Triangle(){
 	mat4 modelViewMatrix = mat4::identity();
 	mat4 modelViewProjectionMatrix = mat4::identity();
 
-	translationMatrix = vmath::translate(0.0f, 0.0f, -7.0f);
+	translationMatrix = vmath::translate(0.0f, 0.0f, -6.0f);
 	modelViewMatrix = translationMatrix;
 	modelViewProjectionMatrix = perspectiveProjectionMatrix * modelViewMatrix;
 
@@ -994,7 +994,7 @@ void amp_Circle(){
 	mat4 modelViewMatrix = mat4::identity();
 	mat4 modelViewProjectionMatrix = mat4::identity();
 
-	translationMatrix = vmath::translate(0.0f, 0.0f, -6.0f);
+	translationMatrix = vmath::translate(0.0f, -0.4f, -6.0f);
 	modelViewMatrix = translationMatrix;
 	modelViewProjectionMatrix = perspectiveProjectionMatrix * modelViewMatrix;
 
@@ -1010,7 +1010,7 @@ void amp_Circle(){
 void amp_CirclePoints(){
 	//local var decl.
 	GLfloat incre = 1.0f;
-	GLfloat radius = 0.3f;
+	GLfloat radius = 0.6f;
 	GLuint j = 0;
 	
 	//code		
