@@ -15,8 +15,8 @@ using namespace vmath;
 
 //cuda headers
 #include "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\include\cuda_runtime.h"
-#include "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\include\cuda_gl_interop.h"
-#include "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\include\device_launch_parameters.h"
+#include "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\include\cuda_gl_interop.h"    			//this is added for cuda graphics resource struct
+#include "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.7\include\device_launch_parameters.h"		//optional - added on for intellisense
 #include <cuda.h>
 
 #define WIN_WIDTH 800
@@ -433,7 +433,7 @@ int initialize(void)
 	if (glewInit() != GLEW_OK)
 		return(-5);
 
-	//cuda initialization
+	//CUDA initialization
 	int dev_count = 0;
 	cudaResult = cudaGetDeviceCount(&dev_count);
 	if (cudaResult != cudaSuccess)
