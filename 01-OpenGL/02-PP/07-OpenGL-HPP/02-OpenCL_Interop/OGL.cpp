@@ -809,7 +809,7 @@ void display(void)
 		}
 
 		//kernel configuration
-		size_t globalWorkSize[2];
+		size_t globalWorkSize[2];	//1D 2 element operation
 
 		//step-3 : run OpenCL kernel
 		globalWorkSize[0] = meshWidth;
