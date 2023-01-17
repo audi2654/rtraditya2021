@@ -1,0 +1,5 @@
+#include "OGL.h"
+AMP_MYICON ICON ampIcon.ico
+AMP_MYAUDIO WAVE audiofile.wav
+IDBITMAP_PAKHRE BITMAP image_pakhre.bmp
+IDBITMAP_MULE BITMAP image_mule.bmp
